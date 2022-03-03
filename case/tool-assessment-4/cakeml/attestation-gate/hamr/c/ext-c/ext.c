@@ -8,7 +8,7 @@
 void byte_array_default(STACK_FRAME uint8_t* byteArray, size_t numBits, size_t numBytes) {
   DeclNewStackFrame(caller, "ext.c", "", "byte_array_default", 0);
 
-  sfAssert(SF (numBits - 1) / 8  + 1 <= numBytes, "byte_array_default: numBytes * 8 must be at least numBits");
+  sfAssert((numBits - 1) / 8  + 1 <= numBytes, "byte_array_default: numBytes * 8 must be at least numBits")
 
   for(size_t byte = 0; byte < numBytes; byte++) {
     uint8_t v = 0;
@@ -25,7 +25,7 @@ void byte_array_default(STACK_FRAME uint8_t* byteArray, size_t numBits, size_t n
 void byte_array_string(STACK_FRAME String str, uint8_t* byteArray, size_t numBytes) {
   DeclNewStackFrame(caller, "ext.c", "", "byte_array_string", 0);
 
-  sfAssert(SF (str->size + numBytes) <= MaxString, "byte_array_string: Insufficient maximum for String characters, consider increasing the --max-string-size option");
+  sfAssert((str->size + numBytes) <= MaxString, "byte_array_string: Insufficient maximum for String characters, consider increasing the --max-string-size option")
 
   for(size_t byte = 0; byte < numBytes; byte++) {
     U8_string_(SF str, byteArray[byte]);

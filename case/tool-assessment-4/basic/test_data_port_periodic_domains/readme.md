@@ -206,18 +206,16 @@ then
 Timeout = 18 seconds
 ```
 Booting all finished, dropped to user space
-Entering pre-init of consumer_thread_i_consumer_consumer
-Entering pre-init of producer_thread_i_producer_producer
+Entering pre-init of consumer_thEntering pre-init of producer_thread_i_producer_producer
+Leaving pre-init of producer_thread_i_produread_i_consumer_consumer
 Leaving pre-init of consumer_thread_i_consumer_consumer
-Leaving pre-init of producer_thread_i_producer_producer
+cer_producer
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 00 ]
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 01 ]
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 02 ]
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 03 ]
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 04 ]
 top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 05 ]
-top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 06 ]
-top_impl_Instance_consumer_consumer: Read 8 bits on read_port: [ 07 ]
 
 ```
 <!--example-output-sel4_end-->

@@ -215,15 +215,17 @@ Timeout = 18 seconds
 ```
 Booting all finished, dropped to user space
 Entering pre-init of consumer_t_i_consumer_consumer
-Leaving pEntering pre-init of producer_t_i_producer_producer
-Leaving pre-inire-init of consumer_t_i_consumer_consumer
-t of producer_t_i_producer_producer
+Entering pre-init of producer_t_i_producer_producer
+Leaving prLeaving pre-init of consumer_t_i_consumer_consumer
+e-init of producer_t_i_producer_producer
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 00 ]
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 01 ]
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 02 ]
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 03 ]
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 04 ]
 top_impl_Instance_consumer_consumer: Received 8 on read port: [ 05 ]
+top_impl_Instance_consumer_consumer: Received 8 on read port: [ 06 ]
+top_impl_Instance_consumer_consumer: Received 8 on read port: [ 07 ]
 
 ```
 <!--example-output-sel4_end-->

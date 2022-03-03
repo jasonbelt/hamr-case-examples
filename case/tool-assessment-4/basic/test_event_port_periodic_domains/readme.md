@@ -204,17 +204,15 @@ Timeout = 18 seconds
 ```
 Booting all finished, dropped to user space
 Entering pre-init of consumer_t_i_consumer_consumer
-Leaving pre-init of consumer_t_iEntering pre-init of producer_t_i_producer_producer
-Leaving pre-init of producer_t_i_producer_producer
-_consumer_consumer
+Leaving pre-init of conEntering pre-init of producer_t_i_producer_producer
+Leaving pre-init of producer_t_i_producer_sumer_t_i_consumer_consumer
+producer
 top_impl_Instance_consumer_consumer: Received 1 events on consume
 top_impl_Instance_consumer_consumer: Received 2 events on consume
 top_impl_Instance_consumer_consumer: Received 3 events on consume
 top_impl_Instance_consumer_consumer: Received 4 events on consume
 top_impl_Instance_consumer_consumer: Received 5 events on consume
 top_impl_Instance_consumer_consumer: Received 6 events on consume
-top_impl_Instance_consumer_consumer: Received 7 events on consume
-top_impl_Instance_consumer_consumer: Received 8 events on consume
 
 ```
 <!--example-output-sel4_end-->

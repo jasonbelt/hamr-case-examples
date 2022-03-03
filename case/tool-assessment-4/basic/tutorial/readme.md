@@ -194,9 +194,9 @@ Timeout = 18 seconds
 ```
 Booting all finished, dropped to user space
 Entering pre-init of consumer_t_i_consumer_consumer
-Leaving pre-init of consumer_t_i_consumer_consumer
 Entering pre-init of producer_t_i_producer_producer
 Leaving pre-init of producer_t_i_producer_producer
+Leaving pre-init of consumer_t_i_consumer_consumer
 Sent 0
 [ 00 00 00 00 ]
 
@@ -244,24 +244,6 @@ Sent 7
 
 Received 7
 top_impl_Instance_consumer_consumer: Received 32 bits on port read_port: [ 00 00 00 07 ]
-
-Sent 8
-[ 00 00 00 08 ]
-
-Received 8
-top_impl_Instance_consumer_consumer: Received 32 bits on port read_port: [ 00 00 00 08 ]
-
-Sent 9
-[ 00 00 00 09 ]
-
-Received 9
-top_impl_Instance_consumer_consumer: Received 32 bits on port read_port: [ 00 00 00 09 ]
-
-Sent 10
-[ 00 00 00 0A ]
-
-Received 10
-top_impl_Instance_consumer_consumer: Received 32 bits on port read_port: [ 00 00 00 0A ]
 
 
 ```
