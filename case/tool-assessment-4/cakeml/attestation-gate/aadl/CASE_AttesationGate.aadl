@@ -21,7 +21,7 @@ public
 			LineSearchTask_out: out event data port CMASI::LineSearchTask.i;
 		properties
 			--CASE_Properties::Component_Type => MONITOR;
-			Source_Text => ("cakeml/CASE_AttestationGate_thr_Impl/CASE_AttestationGate_thr_Impl.S");
+			Source_Text => ("cakeml/CASE_AttestationGate_thr_Impl/CASE_AttestationGate_thr_Impl.S", "cakeml/CASE_AttestationGate_thr_Impl/basis_ffi.c");
 			CASE_Properties::Component_Language => CakeML;
 			CASE_Properties::Component_Spec => ("CASE_AttestationGate_policy");
 			Dispatch_Protocol => Periodic;
