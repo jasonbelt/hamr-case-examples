@@ -2,18 +2,18 @@
 
  Table of Contents
 <!--table-of-contents_start-->
-  * [AADL Architecture](#aadl-architecture)
-  * [Linux](#linux)
-    * [HAMR Configuration: Linux](#hamr-configuration-linux)
-    * [Behavior Code: Linux](#behavior-code-linux)
-    * [How to Build/Run: Linux](#how-to-buildrun-linux)
-  * [SeL4](#sel4)
-    * [HAMR Configuration: SeL4](#hamr-configuration-sel4)
-    * [Behavior Code: SeL4](#behavior-code-sel4)
-    * [How to Build/Run: SeL4](#how-to-buildrun-sel4)
-    * [Example Output: SeL4](#example-output-sel4)
-    * [CAmkES Architecture: SeL4](#camkes-architecture-sel4)
-    * [HAMR CAmkES Architecture: SeL4](#hamr-camkes-architecture-sel4)
+* [AADL Architecture](#aadl-architecture)
+* [Linux](#linux)
+  * [HAMR Configuration: Linux](#hamr-configuration-linux)
+  * [Behavior Code: Linux](#behavior-code-linux)
+  * [How to Build/Run: Linux](#how-to-buildrun-linux)
+* [SeL4](#sel4)
+  * [HAMR Configuration: SeL4](#hamr-configuration-sel4)
+  * [Behavior Code: SeL4](#behavior-code-sel4)
+  * [How to Build/Run: SeL4](#how-to-buildrun-sel4)
+  * [Example Output: SeL4](#example-output-sel4)
+  * [CAmkES Architecture: SeL4](#camkes-architecture-sel4)
+  * [HAMR CAmkES Architecture: SeL4](#hamr-camkes-architecture-sel4)
 <!--table-of-contents_end-->
 
 This example illustrates how to model and implement AADL event data port communications between

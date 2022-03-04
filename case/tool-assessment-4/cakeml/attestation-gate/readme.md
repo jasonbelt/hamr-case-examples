@@ -3,6 +3,8 @@
  Table of Contents
 <!--table-of-contents_start-->
 * [AADL Architecture](#aadl-architecture)
+* [Installing the Tools](#installing-the-tools)
+  * [Install CakeML](#install-cakeml)
 * [Modify the AADL Model for CakeML Integration](#modify-the-aadl-model-for-cakeml-integration)
   * [Wire Protocol](#wire-protocol)
   * [Specify Monitor/Filter components](#specify-monitorfilter-components)
