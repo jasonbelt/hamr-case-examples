@@ -555,12 +555,12 @@ base.consumer_thread_i_consumer_consumer_App.main(consumer_thread_i_consumer_con
 base.consumer_thread_i_consumer_consumer_App.<App>(consumer_thread_i_consumer_consumer_App.scala)
 ```
 
-To enable the macros for Linux, run the compile script with the CMake option ``WITH_LOC`` enabled.  For example,
+To enable the macros for Linux, run the compile script with the ``with-loc`` option.  For example,
 
 ```
-WITH_LOC=ON ./hamr/c/bin/compile-linux.sh
+./hamr/c/bin/compile.cmd --with-loc
 ```
-and similarly for CAmkES, 
+For CAmkES set an environment variable ``WITH_LOC`` to ``ON``.  For example, 
 ```
 WITH_LOC=ON ./hamr/camkes/bin/run-camkes.sh -s
 ``` 
