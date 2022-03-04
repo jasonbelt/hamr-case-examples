@@ -94,7 +94,7 @@ when installed in OSATE (not FMIDE) and under Linux so may not work as expected 
 under a different operating system. The script contains instructions on how to install the plugin.
 
 ```
-./aadl/bin/run-hamr-Linux.sh
+./aadl/bin/run-hamr-Linux.sh <path-to-FMIDE-executable>
 ```
 
 </details>
@@ -159,7 +159,7 @@ when installed in OSATE (not FMIDE) and under Linux so may not work as expected 
 under a different operating system. The script contains instructions on how to install the plugin.
 
 ```
-./aadl/bin/run-hamr-SeL4.sh
+./aadl/bin/run-hamr-SeL4.sh <path-to-FMIDE-executable>
 ```
 
 </details>
@@ -360,12 +360,8 @@ The developer codes the system by carrying out the following general activities:
 The developer compiles and executes the system using the platform-specific scripts in the `c/bin` folder. `stop.sh` is used to gracefully halt the system.
 
 ```
-compile-cygwin.sh
-compile-linux.sh
-compile-macOS.sh
-run-cygwin.sh
-run-linux.sh
-run-macOS.sh
+compile.cmd
+run.sh
 stop.sh
 ```
 
