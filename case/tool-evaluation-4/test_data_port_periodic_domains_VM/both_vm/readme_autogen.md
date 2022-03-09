@@ -100,7 +100,169 @@ under a different operating system. The script contains instructions on how to i
 <!--example-output-sel4_only_start-->
 Timeout = 90 seconds
 ```
-NEED TO MANUALLY UPDATE EXPECTED OUTPUT
+Bootstrapping kernel
+Warning: Could not infer GIC interrupt target ID, assuming 0.
+available phys memory regions: 1
+  [60000000..c0000000]
+reserved virt address space regions: 3
+  [8060000000..8060246000]
+  [8060246000..8060247dbc]
+  [8060248000..8061db1000]
+Booting all finished, dropped to user space
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 16777216 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 16777216 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 2097152 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
+Loading Linux: 'linux' dtb: ''
+install_linux_devices@main.c:651 module name: map_frame_hack
+install_linux_devices@main.c:651 module name: init_ram
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
+Loading Linux: 'linux' dtb: ''
+install_linux_devices@main.c:651 module name: map_frame_hack
+install_linux_devices@main.c:651 module name: init_ram
+install_linux_devices@main.c:651 module name: virtio_con
+install_linux_devices@main.c:651 module name: cross_vm_connections
+install_linux_devices@main.c:651 module name: virtio_con
+install_linux_devices@main.c:651 module name: cross_vm_connections
+libsel4muslcsys: Error attempting syscall 215
+libsel4muslcsys: Error attempting syscall 215
+libsel4muslcsys: Error attempting syscall 215
+libsel4muslcsys: Error attempting syscall 215
+clean_up@fdtgen.c:364 Non-existing node None specified to be kept
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8020000
+alloc_vm_device_cap@main.c:938 Grabbing the entire cap for device memory
+alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
+clean_up@fdtgen.c:364 Non-existing node None specified to be kept
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8020000
+alloc_vm_device_cap@main.c:938 Grabbing the entire cap for device memory
+alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[    4.600024] Unable to detect cache hierarchy for CPU 0
+[    4.623560] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    4.639434] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    4.656333] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    4.671948] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    4.695145] mousedev: PS/2 mouse device common for all mice
+[    4.721037] ledtrig-cpu: registered to indicate activity on CPUs
+[    4.735821] dmi-sysfs: dmi entry is absent.
+[    4.749717] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    4.769636] NET: Registered protocol family 10
+[    4.801026] mip6: Mobile IPv6
+[    4.817696] NET: Registered protocol family 17
+[    4.829328] mpls_gso: MPLS GSO support
+[    4.840500] Registered cp15_barrier emulation handler
+[    4.853695] Registered setend emulation handler
+[    4.876496] registered taskstats version 1
+[    4.890889] zswap: loaded using pool lzo/zbud
+[    4.911389] ima: No TPM chip found, activating TPM-bypass!
+[    4.924392] ima: Allocated hash algorithm: sha256
+[    4.585354] Unable to detect cache hierarchy for CPU 0
+[    4.598503] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    4.614313] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    4.629627] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    4.644533] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    4.665201] mousedev: PS/2 mouse device common for all mice
+[    4.690549] ledtrig-cpu: registered to indicate activity on CPUs
+[    4.705268] dmi-sysfs: dmi entry is absent.
+[    4.717820] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    4.738880] NET: Registered protocol family 10
+[    4.770612] mip6: Mobile IPv6
+[    4.789491] NET: Registered protocol family 17
+[    4.802294] mpls_gso: MPLS GSO support
+[    4.812345] Registered cp15_barrier emulation handler
+[    4.826109] Registered setend emulation handler
+[    4.846777] registered taskstats version 1
+[    4.861158] zswap: loaded using pool lzo/zbud
+[    4.879170] ima: No TPM chip found, activating TPM-bypass!
+[    4.892820] ima: Allocated hash algorithm: sha256
+[    4.917973] hctosys: unable to open rtc device (rtc0)
+[    4.932891] PM: Hibernation image not present or could not be loaded.
+[    4.949134] initcall clk_disable_unused blacklisted
+[    5.771878] hctosys: unable to open rtc device (rtc0)
+[    5.784689] PM: Hibernation image not present or could not be loaded.
+[    5.799772] initcall clk_disable_unused blacklisted
+[    5.853562] Freeing unused kernel memory: 3776K
+[    5.896391] Freeing unused kernel memory: 3776K
+Starting syslogd: OK
+Starting klogd: OK
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: OK
+Running sysctl: OK
+Initializing random number generator... [   11.580811] random: dd: uninitialized urandom read (512 bytes read)
+done.
+Initializing random number generator... [   11.657928] random: dd: uninitialized urandom read (512 bytes read)
+Starting network: done.
+Starting network: OK
+[   14.212619] connection: loading out-of-tree module taints kernel.
+[   14.259098] Event Bar (dev-0) initalised
+[   14.279239] 2 Dataports (dev-0) initalised
+[   14.298888] Event Bar (dev-1) initalised
+[   14.318116] 2 Dataports (dev-1) initalised
+OK
+[   14.337471] connection: loading out-of-tree module taints kernel.
+[   14.393425] Event Bar (dev-0) initalised
+[   14.421927] 2 Dataports (dev-0) initalised
+[   14.456390] Event Bar (dev-1) initalised
+[   14.474186] 2 Dataports (dev-1) initalised
+
+Welcome to Buildroot
+buildroot login: 
+Welcome to Buildroot
+buildroot login: root
+# vmdst_process 
+VM App vmdst_process started
+[vmdst_process] test_event_data_port_consumer_component_init called
+[vmdst_process] value {0}
+[vmdst_process] value {0}
+
+Switching input to 1
+[vmdst_process] value {0}
+[vmdst_process] value {0}
+root
+# [vmdst_process] value {0}
+# vmsrc_process [vmdst_process] value {0}
+
+VM App vmsrc_process started
+[vmsrc_process] test_event_data_port_emitter_component_init called
+---------------------------------------
+[vmsrc_process] Sent 0
+[vmdst_process] value {0}
+---------------------------------------
+[vmsrc_process] Sent 1
+[vmdst_process] value {1}
+---------------------------------------
+[vmsrc_process] Sent 2
+[vmdst_process] value {2}
+---------------------------------------
+[vmsrc_process] Sent 3
+[vmdst_process] value {3}
+---------------------------------------
+[vmsrc_process] Sent 4
+[vmdst_process] value {4}
+---------------------------------------
+[vmsrc_process] Sent 5
+[vmdst_process] value {5}
+---------------------------------------
+[vmsrc_process] Sent 6
+[vmdst_process] value {6}
+---------------------------------------
+[vmsrc_process] Sent 7
+[vmdst_process] value {7}
+---------------------------------------
+[vmsrc_process] Sent 8
+[vmdst_process] value {8}
+QEMU: Terminated
 ```
 <!--example-output-sel4_only_end-->
 
