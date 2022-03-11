@@ -266,7 +266,85 @@ then
 <!--example-output-sel4_start-->
 Timeout = 90 seconds
 ```
-NEED TO MANUALLY UPDATE EXPECTED OUTPUT
+Booting all finished, dropped to user space
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 2097152 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
+Entering pre-init of consumer_t_impl_dst_process_dst_thread
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
+Loading Linux: 'linux' dtb: ''
+install_linux_devices@main.c:651 module name: map_frame_hack
+install_linux_devices@main.c:651 module name: init_ram
+top_impl_Instance_dst_process_dst_thread: sender_vm_test_event_data_port_periodic_domains_consumer_t_impl_dst_process_dst_thread_initialise_ called
+Leaving pre-init of consumer_t_impl_dst_process_dst_thread
+install_linux_devices@main.c:651 module name: virtio_con
+install_linux_devices@main.c:651 module name: cross_vm_connections
+libsel4muslcsys: Error attempting syscall 215
+libsel4muslcsys: Error attempting syscall 215
+clean_up@fdtgen.c:364 Non-existing node None specified to be kept
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8020000
+alloc_vm_device_cap@main.c:938 Grabbing the entire cap for device memory
+alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[    3.013761] Unable to detect cache hierarchy for CPU 0
+[    3.703965] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    3.719117] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    3.731640] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    3.744154] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    3.761517] mousedev: PS/2 mouse device common for all mice
+[    3.785188] ledtrig-cpu: registered to indicate activity on CPUs
+[    3.801020] dmi-sysfs: dmi entry is absent.
+[    3.814398] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.833661] NET: Registered protocol family 10
+[    3.863153] mip6: Mobile IPv6
+[    3.878464] NET: Registered protocol family 17
+[    3.890034] mpls_gso: MPLS GSO support
+[    3.901061] Registered cp15_barrier emulation handler
+[    3.913266] Registered setend emulation handler
+[    3.931014] registered taskstats version 1
+[    3.941491] zswap: loaded using pool lzo/zbud
+[    3.958155] ima: No TPM chip found, activating TPM-bypass!
+[    3.970288] ima: Allocated hash algorithm: sha256
+[    3.994575] hctosys: unable to open rtc device (rtc0)
+[    4.009732] PM: Hibernation image not present or could not be loaded.
+[    4.024527] initcall clk_disable_unused blacklisted
+[    4.078017] Freeing unused kernel memory: 3776K
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: OK
+Initializing random number generator... [    9.476796] random: dd: uninitialized urandom read (512 bytes read)
+done.
+Starting network: OK
+[   10.949415] connection: loading out-of-tree module taints kernel.
+[   10.990729] Event Bar (dev-0) initalised
+[   11.014199] 2 Dataports (dev-0) initalised
+[   11.026342] Event Bar (dev-1) initalised
+[   11.045021] 2 Dataports (dev-1) initalised
+
+Welcome to Buildroot
+buildroot login: root
+# vmsrc_process 
+VM App vmsrc_process started
+Setting up outgoing event data port /dev/uio0 4096
+Successfully setup /dev/uio0
+Setting up incoming event data port /dev/uio1 with size 4096
+Successfully setup incoming event data port /dev/uio1
+Hello from vmsrc_process's run method
+[vmsrc_process] Sending {0} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {0} on event data port read_port: 
+[vmsrc_process] Sending {1} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {1} on event data port read_port: 
+[vmsrc_process] Sending {2} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {2} on event data port read_port: 
+[vmsrc_process] Sending {3} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {3} on event data port read_port: 
+[vmsrc_process] Sending {4} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {4} on event data port read_port: 
+[vmsrc_process] Sending {5} on write_port
+top_impl_Instance_dst_process_dst_thread: Received {5} on event data port read_port: 
+[vmsrc_process] Sending {6} on write_port
+QEMU: Terminated
 ```
 <!--example-output-sel4_end-->
 

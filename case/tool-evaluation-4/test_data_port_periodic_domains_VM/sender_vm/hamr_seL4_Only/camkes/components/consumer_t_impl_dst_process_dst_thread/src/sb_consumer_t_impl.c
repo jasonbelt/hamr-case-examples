@@ -5,7 +5,7 @@
 #include <camkes.h>
 
 void sb_entrypoint_period_consumer_t_impl(int64_t *in_arg) {
-  test_event_data_port_consumer_time_triggered_handler((int64_t *) in_arg);
+  test_data_port_consumer_time_triggered_handler((int64_t *) in_arg);
 }
 
 seqNum_t sb_read_port_seqNum;
@@ -40,7 +40,7 @@ bool sb_read_port_read(int8_t * value) {
  *
  ************************************************************************/
 void sb_entrypoint_consumer_t_impl_dst_process_dst_thread_initializer(const int64_t * in_arg) {
-  test_event_data_port_consumer_component_init((int64_t *) in_arg);
+  test_data_port_consumer_component_init((int64_t *) in_arg);
 }
 
 /************************************************************************

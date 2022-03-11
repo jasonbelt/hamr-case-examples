@@ -5,7 +5,7 @@
 #include <camkes.h>
 
 void sb_entrypoint_period_emitter_t_impl(int64_t *in_arg) {
-  test_event_data_port_emitter_time_triggered_handler((int64_t *) in_arg);
+  test_data_port_emitter_time_triggered_handler((int64_t *) in_arg);
 }
 
 seqNum_t sb_write_port_seqNum;
@@ -23,7 +23,7 @@ bool sb_write_port_write(const int8_t * value) {
  *
  ************************************************************************/
 void sb_entrypoint_emitter_t_impl_src_process_src_thread_initializer(const int64_t * in_arg) {
-  test_event_data_port_emitter_component_init((int64_t *) in_arg);
+  test_data_port_emitter_component_init((int64_t *) in_arg);
 }
 
 void pre_init(void) {

@@ -104,7 +104,7 @@ Booting all finished, dropped to user space
 <<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf815400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 2097152 bytes needed, 0 bytes available).>>
 <<seL4(CPU 0) [maskVMRights/187 T0x80bf815400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
 <<seL4(CPU 0) [maskVMRights/187 T0x80bf815400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
-[src_process_src_thread] test_event_data_port_emitter_component_init called
+[src_process_src_thread] test_data_port_emitter_component_init called
 _utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
 Loading Linux: 'linux' dtb: ''
 install_linux_devices@main.c:651 module name: map_frame_hack
@@ -196,31 +196,31 @@ consume_connection_event@cross_vm_connection.c:241 Failed to inject connection i
 ---------------------------------------
 [src_process_src_thread] Sent 37
 consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
-[    3.047031] Unable to detect cache hierarchy for CPU 0
-[    3.071677] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
-[    3.091541] e1000: Copyright (c) 1999-2006 Intel Corporation.
-[    3.107549] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
-[    3.121437] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-[    3.143674] mousedev: PS/2 mouse device common for all mice
-[    3.169281] ledtrig-cpu: registered to indicate activity on CPUs
-[    3.183019] dmi-sysfs: dmi entry is absent.
-[    3.194608] ipip: IPv4 and MPLS over IPv4 tunneling driver
-[    3.217276] NET: Registered p---------------------------------------
+[    2.800470] Unable to detect cache hierarchy for CPU 0
+[    2.823086] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    2.840425] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    2.856728] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    2.872519] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    2.893708] mousedev: PS/2 mouse device common for all mice
+[    2.917465] ledtrig-cpu: registered to indicate activity on CPUs
+[    2.932613] dmi-sysfs: dmi entry is absent.
+[    2.944900] ipip: IPv4 and MPLS over IPv4 tunnelin---------------------------------------
 [src_process_src_thread] Sent 38
-rotocol family 10
-[    3.893484] mip6: Mobile IPv6
-[    3.910724] NET: Registered protocol family 17
-[    3.923538] mpls_gso: MPLS GSO support
-[    3.934325] Registered cp15_barrier emulation handler
-[    3.946897] Registered setend emulation handler
-[    3.965048] registered taskstats version 1
-[    3.977378] zswap: loaded using pool lzo/zbud
-[    3.995797] ima: No TPM chip found, activating TPM-bypass!
-[    4.007736] ima: Allocated hash algorithm: sha256
-[    4.031770] hctosys: unable to open rtc device (rtc0)
-[    4.045977] PM: Hibernation image not present or could not be loaded.
-[    4.060304] initcall clk_disable_unused blacklisted
-[    4.113067] Freeing unused kernel memory: 3776K
+g driver
+[    3.474647] NET: Registered protocol family 10
+[    3.505499] mip6: Mobile IPv6
+[    3.522927] NET: Registered protocol family 17
+[    3.536631] mpls_gso: MPLS GSO support
+[    3.547654] Registered cp15_barrier emulation handler
+[    3.559943] Registered setend emulation handler
+[    3.577871] registered taskstats version 1
+[    3.589497] zswap: loaded using pool lzo/zbud
+[    3.604980] ima: No TPM chip found, activating TPM-bypass!
+[    3.617409] ima: Allocated hash algorithm: sha256
+[    3.639887] hctosys: unable to open rtc device (rtc0)
+[    3.653241] PM: Hibernation image not present or could not be loaded.
+[    3.668691] initcall clk_disable_unused blacklisted
+[    3.722790] Freeing unused kernel memory: 3776K
 ---------------------------------------
 [src_process_src_thread] Sent 39
 Starting syslogd: OK
@@ -230,18 +230,18 @@ OK
 Running sysctl: ---------------------------------------
 [src_process_src_thread] Sent 41
 OK
-Initializing random number generator... ---------------------------------------
-[src_process_src_thread] Sent 42
-[   10.164531] random: dd: uninitialized urandom read (512 bytes read)
+Initializing random number generator... [    8.546701] random: dd: uninitialized urandom read (512 bytes read)
 done.
-Starting network: OK
+Starting network: ---------------------------------------
+[src_process_src_thread] Sent 42
+OK
+[    9.940777] connection: loading out-of-tree module taints kernel.
+[    9.985706] Event Bar (dev-0) initalised
+[   10.012795] 2 Dataports (dev-0) initalised
+[   10.033303] Event Bar (dev-1) initalised
+[   10.050701] 2 Dataports (dev-1) initalised
 ---------------------------------------
 [src_process_src_thread] Sent 43
-[   11.531579] connection: loading out-of-tree module taints kernel.
-[   11.577084] Event Bar (dev-0) initalised
-[   11.609089] 2 Dataports (dev-0) initalised
-[   11.621283] Event Bar (dev-1) initalised
-[   11.649837] 2 Dataports (dev-1) initalised
 
 Welcome to Buildroot
 buildroot login: ---------------------------------------
@@ -255,7 +255,7 @@ root
 [src_process_src_thread] Sent 47
 
 VM App vmdst_process started
-[vmdst_process] test_event_data_port_consumer_component_init called
+[vmdst_process] test_data_port_consumer_component_init called
 ---------------------------------------
 [src_process_src_thread] Sent 48
 [vmdst_process] value {48}
@@ -359,7 +359,132 @@ then
 <!--example-output-sel4_start-->
 Timeout = 90 seconds
 ```
-NEED TO MANUALLY UPDATE EXPECTED OUTPUT
+Booting all finished, dropped to user space
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006c8]: Untyped Retype: Insufficient memory (1 * 2097152 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006c8]: Attempted to make unsupported write only mapping>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006c8]: Attempted to make unsupported write only mapping>>
+Entering pre-init of emitter_t_impl_src_process_src_thread
+top_impl_Instance_src_process_src_thread: receiver_vm_test_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_initialise_ called
+Leaving pre-init of emitter_t_impl_src_process_src_thread
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
+Loading Linux: 'linux' dtb: ''
+install_linux_devices@main.c:651 module name: map_frame_hack
+install_linux_devices@main.c:651 module name: init_ram
+[top_impl_Instance_src_process_src_thread] emitting {1} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {2} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {3} on write_port
+install_linux_devices@main.c:651 module name: virtio_con
+install_linux_devices@main.c:651 module name: cross_vm_connections
+[top_impl_Instance_src_process_src_thread] emitting {4} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {5} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {6} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {7} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {8} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {9} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {10} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {11} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {12} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {13} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {14} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {15} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {16} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {17} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {18} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {19} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {20} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {21} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {22} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {23} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {24} on write_port
+libsel4muslcsys: Error attempting syscall 215
+[top_impl_Instance_src_process_src_thread] emitting {25} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {26} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {27} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {28} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {29} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {30} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {31} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {32} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {33} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {34} on write_port
+libsel4muslcsys: Error attempting syscall 215
+[top_impl_Instance_src_process_src_thread] emitting {35} on write_port
+clean_up@fdtgen.c:364 Non-existing node None specified to be kept
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8020000
+alloc_vm_device_cap@main.c:938 Grabbing the entire cap for device memory
+alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
+[top_impl_Instance_src_process_src_thread] emitting {36} on write_port
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[top_impl_Instance_src_process_src_thread] emitting {37} on write_port
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[    2.865941] Unable to detect cache hierarchy for CPU 0
+[    2.885337] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    2.900526] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    2.914028] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    2.925302] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    2.944842] mousedev: PS/2 mouse device common for all mice
+[    2.967595] ledtrig-cpu: registered to indicate activity on CPUs
+[    2.980402] dmi-sysfs: dmi entry is absent.
+[    2.993448] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.012934] NET: Registered protocol family 10
+[    3.041560] mip6: Mobile IPv6
+[    3.055949] NET: Registered protocol family 17
+[    3.068329] mpls_gso: MPLS GSO support
+[    3.077865] Registered cp15_barrier emulation handler
+[    3.087943] Registered setend emulation handler
+[    3.105180] registered taskstats version 1
+[    3.115982] zswap: loaded using pool lzo/zbud
+[    3.131228] ima: No TPM chip found, activating TPM-bypass!
+[    3.143925] ima: Allocated hash algorithm: sha256
+[    3.164863] hctosys: unable to open rtc device (rtc0)
+[    3.176771] PM: Hibernation image not present or could not be loaded.
+[    3.189843] initcall clk_disable_unused blacklisted
+[top_impl_Instance_src_process_src_thread] emitting {38} on write_port
+[    4.056382] Freeing unused kernel memory: 3776K
+[top_impl_Instance_src_process_src_thread] emitting {39} on write_port
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: [top_impl_Instance_src_process_src_thread] emitting {40} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {41} on write_port
+OK
+Initializing random number generator... [    9.076667] random: dd: uninitialized urandom read (512 bytes read)
+done.
+Starting network: [top_impl_Instance_src_process_src_thread] emitting {42} on write_port
+OK
+[   10.671158] connection: loading out-of-tree module taints kernel.
+[   10.717725] Event Bar (dev-0) initalised
+[   10.741666] 2 Dataports (dev-0) initalised
+[   10.761541] Event Bar (dev-1) initalised
+[   10.773994] 2 Dataports (dev-1) initalised
+
+Welcome to Buildroot
+buildroot login: [top_impl_Instance_src_process_src_thread] emitting {43} on write_port
+[top_impl_Instance_src_process_src_thread] emitting {44} on write_port
+root
+# [top_impl_Instance_src_process_src_thread] emitting {45} on write_port
+# vmdst_process [top_impl_Instance_src_process_src_thread] emitting {46} on write_port
+
+VM App vmdst_process started
+Setting up incoming data port /dev/uio0 with size 4096
+Successfully setup incoming data port /dev/uio0
+Setting up incoming event data port /dev/uio1 with size 4096
+Successfully setup incoming event data port /dev/uio1
+Hello from vmdst_process's run method
+[vmdst_process] Received {46} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {47} on write_port
+[vmdst_process] Received {47} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {48} on write_port
+[vmdst_process] Received {48} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {49} on write_port
+[vmdst_process] Received {49} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {50} on write_port
+[vmdst_process] Received {50} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {51} on write_port
+[vmdst_process] Received {51} on read_port
+[top_impl_Instance_src_process_src_thread] emitting {52} on write_port
+[vmdst_process] Received {52} on read_port
+QEMU: Terminated
 ```
 <!--example-output-sel4_end-->
 

@@ -9,14 +9,14 @@ import art._
 import art.DispatchPropertyProtocol._
 import art.PortMode._
 import both_vm._
-import both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_seL4Nix
+import both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_seL4Nix
 
 object src_thread extends App {
 
-  val src_threadBridge : both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge = {
+  val src_threadBridge : both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge = {
     val write_port = Port[Base_Types.Integer_8] (id = 0, name = "top_impl_Instance_src_process_src_thread_write_port", mode = DataOut)
 
-    both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge(
+    both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge(
       id = 0,
       name = "top_impl_Instance_src_process_src_thread",
       dispatchProtocol = Periodic(period = 1000),
@@ -101,14 +101,14 @@ object src_thread extends App {
       printDataContent(Base_Types.Integer_8_Payload(Base_Types.Integer_8_example()))
       printDataContent(art.Empty())
 
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logInfo("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logDebug("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logError("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logInfo("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logDebug("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logError("")
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.put_write_port(Base_Types.Integer_8_example())
-      both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.put_write_port(Base_Types.Integer_8_example())
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logInfo("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logDebug("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.logError("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logInfo("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logDebug("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.logError("")
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_initialization_api.get.put_write_port(Base_Types.Integer_8_example())
+      both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread_Bridge.c_operational_api.get.put_write_port(Base_Types.Integer_8_example())
     }
   }
 

@@ -10,7 +10,10 @@ add_subdirectory(${SlangTypeLibrary_DIR} SlangTypeLibrary)
 
 add_subdirectory(${SB_Type_Library_DIR} SB_Type_Library)
 
-add_executable(vmdst_process vmdst_process.c)
+add_executable(vmdst_process 
+               vmdst_process.c
+               vm_utils.h
+               vm_utils.c)
 
 target_link_libraries(vmdst_process
                       SB_Type_Library

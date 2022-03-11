@@ -34,7 +34,7 @@ Unit sender_vm_test_event_data_port_periodic_domains_consumer_t_impl_dst_process
 
   S8 t0;
   if(api_get_read_port__sender_vm_test_event_data_port_periodic_domains_consumer_t_impl_dst_process_dst_thread(SF &t0)) {
-    printf("%s: Received data on event data port read_port: \n", component_id);
+    printf("%s: Received {%d} on event data port read_port: \n", component_id, t0);
 
     /* alternative using logInfo.  Commented out as the constructed String may be too large
     DeclNewString(read_port_str);

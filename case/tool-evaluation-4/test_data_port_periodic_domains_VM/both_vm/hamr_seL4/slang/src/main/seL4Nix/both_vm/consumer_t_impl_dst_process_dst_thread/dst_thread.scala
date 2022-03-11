@@ -9,14 +9,14 @@ import art._
 import art.DispatchPropertyProtocol._
 import art.PortMode._
 import both_vm._
-import both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_seL4Nix
+import both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_seL4Nix
 
 object dst_thread extends App {
 
-  val dst_threadBridge : both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge = {
+  val dst_threadBridge : both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge = {
     val read_port = Port[Base_Types.Integer_8] (id = 0, name = "top_impl_Instance_dst_process_dst_thread_read_port", mode = DataIn)
 
-    both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge(
+    both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge(
       id = 0,
       name = "top_impl_Instance_dst_process_dst_thread",
       dispatchProtocol = Periodic(period = 1000),
@@ -98,13 +98,13 @@ object dst_thread extends App {
       printDataContent(Base_Types.Integer_8_Payload(Base_Types.Integer_8_example()))
       printDataContent(art.Empty())
 
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logInfo("")
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logDebug("")
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logError("")
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logInfo("")
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logDebug("")
-      both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logError("")
-      val apiUsage_read_port: Option[Base_Types.Integer_8] = both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.get_read_port()
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logInfo("")
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logDebug("")
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_initialization_api.get.logError("")
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logInfo("")
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logDebug("")
+      both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.logError("")
+      val apiUsage_read_port: Option[Base_Types.Integer_8] = both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread_Bridge.c_operational_api.get.get_read_port()
     }
   }
 

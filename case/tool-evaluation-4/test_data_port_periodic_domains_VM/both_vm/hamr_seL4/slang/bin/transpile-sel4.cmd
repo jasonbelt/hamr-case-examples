@@ -24,7 +24,7 @@ val SCRIPT_HOME: Os.Path = Os.slashDir
 val PATH_SEP: String = Os.pathSep
 
 val emitter_t_impl_src_process_src_thread: ISZ[String] = ISZ(
-  "--sourcepath", s"${SCRIPT_HOME}/../src/main/bridge${PATH_SEP}${SCRIPT_HOME}/../src/main/component${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/test_event_data_port_periodic_domains${PATH_SEP}${SCRIPT_HOME}/../src/main/art${PATH_SEP}${SCRIPT_HOME}/../src/main/data${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/emitter_t_impl_src_process_src_thread",
+  "--sourcepath", s"${SCRIPT_HOME}/../src/main/bridge${PATH_SEP}${SCRIPT_HOME}/../src/main/component${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/test_data_port_periodic_domains${PATH_SEP}${SCRIPT_HOME}/../src/main/art${PATH_SEP}${SCRIPT_HOME}/../src/main/data${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/emitter_t_impl_src_process_src_thread",
   "--output-dir", s"${SCRIPT_HOME}/../../camkes/slang_libraries/emitter_t_impl_src_process_src_thread",
   "--name", "emitter_t_impl_src_process_src_thread",
   "--apps", "both_vm.emitter_t_impl_src_process_src_thread.src_thread",
@@ -39,12 +39,12 @@ val emitter_t_impl_src_process_src_thread: ISZ[String] = ISZ(
   "--stack-size", "16777216",
   "--stable-type-id",
   "--exts", s"${SCRIPT_HOME}/../../c/ext-c/ext.c${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/ext.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread.c${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread_api.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread_api.c${PATH_SEP}${SCRIPT_HOME}/../../c/etc_seL4/adapters/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread_adapter.h${PATH_SEP}${SCRIPT_HOME}/../../c/etc_seL4/adapters/emitter_t_impl_src_process_src_thread/emitter_t_impl_src_process_src_thread_adapter.c",
-  "--exclude-build", "both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread,both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread",
+  "--exclude-build", "both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread,both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread",
   "--lib-only",
   "--verbose")
 
 val consumer_t_impl_dst_process_dst_thread: ISZ[String] = ISZ(
-  "--sourcepath", s"${SCRIPT_HOME}/../src/main/bridge${PATH_SEP}${SCRIPT_HOME}/../src/main/component${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/test_event_data_port_periodic_domains${PATH_SEP}${SCRIPT_HOME}/../src/main/art${PATH_SEP}${SCRIPT_HOME}/../src/main/data${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/consumer_t_impl_dst_process_dst_thread",
+  "--sourcepath", s"${SCRIPT_HOME}/../src/main/bridge${PATH_SEP}${SCRIPT_HOME}/../src/main/component${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/test_data_port_periodic_domains${PATH_SEP}${SCRIPT_HOME}/../src/main/art${PATH_SEP}${SCRIPT_HOME}/../src/main/data${PATH_SEP}${SCRIPT_HOME}/../src/main/seL4Nix/both_vm/consumer_t_impl_dst_process_dst_thread",
   "--output-dir", s"${SCRIPT_HOME}/../../camkes/slang_libraries/consumer_t_impl_dst_process_dst_thread",
   "--name", "consumer_t_impl_dst_process_dst_thread",
   "--apps", "both_vm.consumer_t_impl_dst_process_dst_thread.dst_thread",
@@ -59,7 +59,7 @@ val consumer_t_impl_dst_process_dst_thread: ISZ[String] = ISZ(
   "--stack-size", "16777216",
   "--stable-type-id",
   "--exts", s"${SCRIPT_HOME}/../../c/ext-c/ext.c${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/ext.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread.c${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread_api.h${PATH_SEP}${SCRIPT_HOME}/../../c/ext-c/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread_api.c${PATH_SEP}${SCRIPT_HOME}/../../c/etc_seL4/adapters/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread_adapter.h${PATH_SEP}${SCRIPT_HOME}/../../c/etc_seL4/adapters/consumer_t_impl_dst_process_dst_thread/consumer_t_impl_dst_process_dst_thread_adapter.c",
-  "--exclude-build", "both_vm.test_event_data_port_periodic_domains.emitter_t_impl_src_process_src_thread,both_vm.test_event_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread",
+  "--exclude-build", "both_vm.test_data_port_periodic_domains.emitter_t_impl_src_process_src_thread,both_vm.test_data_port_periodic_domains.consumer_t_impl_dst_process_dst_thread",
   "--lib-only",
   "--verbose")
 

@@ -4,7 +4,7 @@
 -- Micro example AADL to show single AADL dataport communications for
 -- a periodic process running under the seL4 domain scheduler
 ----------------------------------------------------------------------
-package test_event_data_port_periodic_domains
+package test_data_port_periodic_domains
 public
 	with HAMR;
 	with Base_Types;
@@ -18,8 +18,8 @@ public
 			Period => 1000ms;
 			Compute_Execution_Time => 10ms .. 10ms;
 			Source_Text => ("behavior_code/components/emitter/src/emitter.c");
-			Initialize_Entrypoint_Source_Text => "test_event_data_port_emitter_component_init";
-			Compute_Entrypoint_Source_Text => "test_event_data_port_emitter_time_triggered_handler";
+			Initialize_Entrypoint_Source_Text => "test_data_port_emitter_component_init";
+			Compute_Entrypoint_Source_Text => "test_data_port_emitter_time_triggered_handler";
 	end emitter_t;
 
 	thread implementation emitter_t.impl
@@ -49,8 +49,8 @@ public
 			Period => 1000ms;
 			Compute_Execution_Time => 10ms .. 10ms;
 			Source_Text => ("behavior_code/components/consumer/src/consumer.c");
-			Initialize_Entrypoint_Source_Text => "test_event_data_port_consumer_component_init";
-			Compute_Entrypoint_Source_Text => "test_event_data_port_consumer_time_triggered_handler";
+			Initialize_Entrypoint_Source_Text => "test_data_port_consumer_component_init";
+			Compute_Entrypoint_Source_Text => "test_data_port_consumer_time_triggered_handler";
 	end consumer_t;
 
 	thread implementation consumer_t.impl
@@ -112,4 +112,4 @@ public
 		**};
 	end top.impl;
 
-end test_event_data_port_periodic_domains;
+end test_data_port_periodic_domains;

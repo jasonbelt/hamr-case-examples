@@ -6,15 +6,13 @@
 
 static char* component_id = "top_impl_Instance_src_process_src_thread";
 
+S8 value = 0;
 Unit receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_initialise_(STACK_FRAME_ONLY) {
   DeclNewStackFrame(caller, "emitter_t_impl_src_process_src_thread.c", "", "receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_initialise_", 0);
 
   printf("%s: receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_initialise_ called\n", component_id);
 
-  // example usage of api setters
-
-  S8 t0 = receiver_vm_Base_Types_Integer_8_example(SF_LAST);
-  api_put_write_port__receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread(SF t0);
+  api_put_write_port__receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread(SF value);
 
   /* example usage of api loggers. Commented out as the constructed String may be too long
   api_logInfo__receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread(SF string("Example logInfo"));
@@ -32,4 +30,7 @@ Unit receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_proces
 Unit receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_timeTriggered_(STACK_FRAME_ONLY) {
   DeclNewStackFrame(caller, "emitter_t_impl_src_process_src_thread.c", "", "receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_timeTriggered_", 0);
 
+  value = value + 1;
+  printf("[%s] Sending %d on event data port write_port\n", component_id, value);
+  api_put_write_port__receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread(SF value);
 }

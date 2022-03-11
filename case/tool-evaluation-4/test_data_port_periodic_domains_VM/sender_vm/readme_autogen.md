@@ -10,7 +10,7 @@
     * [Example Output: SeL4_Only](#example-output-sel4_only)
     * [CAmkES Architecture: SeL4_Only](#camkes-architecture-sel4_only)
     * [HAMR CAmkES Architecture: SeL4_Only](#hamr-camkes-architecture-sel4_only)
- <!--table-of-contents_end-->
+<!--table-of-contents_end-->
 
 
 ## AADL Architecture
@@ -100,8 +100,7 @@ _utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating 
 Loading Linux: 'linux' dtb: ''
 install_linux_devices@main.c:651 module name: map_frame_hack
 install_linux_devices@main.c:651 module name: init_ram
-[dst_process_dst_thread] test_event_data_port_consumer_component_init called
-[dst_process_dst_thread] value {0}
+[dst_process_dst_thread] test_data_port_consumer_component_init called
 [dst_process_dst_thread] value {0}
 [dst_process_dst_thread] value {0}
 install_linux_devices@main.c:651 module name: virtio_con
@@ -149,58 +148,58 @@ alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
 consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
 [dst_process_dst_thread] value {0}
 consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
-[    2.584060] Unable to detect cache hierarchy for CPU 0
-[    2.607507] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
-[    2.622907] e1000: Copyright (c) 1999-2006 Intel Corporation.
-[    2.636646] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
-[    2.652034] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-[    2.673634] mousedev: PS/2 mouse device common for all mice
-[    2.696783] ledtrig-cpu: registered to indicate activity on CPUs
-[    2.711010] dmi-sysfs: dmi entry is absent.
-[    2.723293] ipip: IPv4 and MPLS over IPv4 tunneling driver
-[    2.740813] NET: Registered protocol family 10
-[dst_process_dst_thread] value {0}
-[    3.397983] mip6: Mobile IPv6
-[    3.414302] NET: Registered protocol family 17
-[    3.425210] mpls_gso: MPLS GSO support
-[    3.435244] Registered cp15_barrier emulation handler
-[    3.445969] Registered setend emulation handler
-[    3.464396] registered taskstats version 1
-[    3.474966] zswap: loaded using pool lzo/zbud
-[    3.492215] ima: No TPM chip found, activating TPM-bypass!
-[    3.504599] ima: Allocated hash algorithm: sha256
-[    3.526890] hctosys: unable to open rtc device (rtc0)
-[    3.540141] PM: Hibernation image not present or could not be loaded.
-[    3.555196] initcall clk_disable_unused blacklisted
-[    3.605815] Freeing unused kernel memory: 3776K
+[    3.168805] Unable to detect cache hierarchy for CPU 0
+[    3.187277] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    3.205025] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    3.218523] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    3.231334] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    3.250586] mousedev: PS/2 mouse device common for all mice
+[    3.276658] ledtrig-cpu: registered to indicate activity on CPUs
+[    3.293344] dmi-sysfs: dmi entry is absent.
+[    3.306567] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.326163] NET: Registered protocol family 10
+[    3.357422] mip6: Mobile IPv6
+[    3.375569] NET: Registered protocol family 17
+[    3.386975] mpls_gso: MPLS GSO support
+[    3.397746] Registered cp15_barrier emulation handler
+[    3.409600] Registered setend emulation handler
+[    3.427495] registered taskstats version 1
+[    3.439180] zswap: loaded using pool lzo/zbud
+[    3.457241] ima: No TPM chip found, activating TPM-bypass!
+[    3.473755] ima: Allocated hash algorithm: sha256
+[    3.497626] hctosys: unable to open rtc device (rtc0)
+[    3.511071] PM: Hibernation image not present or could not be[dst_process_dst_thread] value {0}
+ loaded.
+[    4.337079] initcall clk_disable_unused blacklisted
+[    4.385723] Freeing unused kernel memory: 3776K
 [dst_process_dst_thread] value {0}
 Starting syslogd: OK
 Starting klogd: OK
-[dst_process_dst_thread] value {0}
 Running sysctl: [dst_process_dst_thread] value {0}
 OK
-Initializing random number generator... [    8.549326] random: dd: uninitialized urandom read (512 bytes read)
+[dst_process_dst_thread] value {0}
+Initializing random number generator... [    8.656094] random: dd: uninitialized urandom read (512 bytes read)
 done.
 Starting network: [dst_process_dst_thread] value {0}
 OK
-[    9.718894] connection: loading out-of-tree module taints kernel.
-[    9.765371] Event Bar (dev-0) initalised
-[    9.778402] 2 Dataports (dev-0) initalised
-[    9.808979] Event Bar (dev-1) initalised
-[    9.835401] 2 Dataports (dev-1) initalised
+[   10.107111] connection: loading out-of-tree module taints kernel.
+[   10.152903] Event Bar (dev-0) initalised
+[   10.172480] 2 Dataports (dev-0) initalised
+[   10.195665] Event Bar (dev-1) initalised
+[   10.215013] 2 Dataports (dev-1) initalised
 
 Welcome to Buildroot
 buildroot login: [dst_process_dst_thread] value {0}
-[dst_process_dst_thread] value {0}
-[dst_process_dst_thread] value {0}
-[dst_process_dst_thread] value {0}
-root
+
+Welcome to Buildroot
+buildroot login: [dst_process_dst_thread] value {0}
+root[dst_process_dst_thread] value {0}
+
 # [dst_process_dst_thread] value {0}
-vm[dst_process_dst_thread] value {0}
 # vmsrc_process [dst_process_dst_thread] value {0}
 
 VM App vmsrc_process started
-[vmsrc_process] test_event_data_port_emitter_component_init called
+[vmsrc_process] test_data_port_emitter_component_init called
 ---------------------------------------
 [vmsrc_process] Sent 0
 [dst_process_dst_thread] value {0}
@@ -224,7 +223,6 @@ VM App vmsrc_process started
 [dst_process_dst_thread] value {6}
 ---------------------------------------
 [vmsrc_process] Sent 7
-[dst_process_dst_thread] value {7}
 QEMU: Terminated
 ```
 <!--example-output-sel4_only_end-->
@@ -240,3 +238,4 @@ QEMU: Terminated
 <!--hamr-camkes-architecture-sel4_only_start-->
 ![HAMR CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-HAMR-arch-SeL4_Only.svg)
 <!--hamr-camkes-architecture-sel4_only_end-->
+

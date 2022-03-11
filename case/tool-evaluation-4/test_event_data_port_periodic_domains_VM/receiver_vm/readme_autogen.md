@@ -309,7 +309,133 @@ then
 <!--example-output-sel4_start-->
 Timeout = 90 seconds
 ```
-NEED TO MANUALLY UPDATE EXPECTED OUTPUT
+Booting all finished, dropped to user space
+<<seL4(CPU 0) [decodeUntypedInvocation/205 T0x80bf816400 "rootserver" @4006f8]: Untyped Retype: Insufficient memory (1 * 2097152 bytes needed, 0 bytes available).>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
+<<seL4(CPU 0) [maskVMRights/187 T0x80bf816400 "rootserver" @4006f8]: Attempted to make unsupported write only mapping>>
+Entering pre-init of emitter_t_impl_src_process_src_thread
+top_impl_Instance_src_process_src_thread: receiver_vm_test_event_data_port_periodic_domains_emitter_t_impl_src_process_src_thread_initialise_ called
+Leaving pre-init of emitter_t_impl_src_process_src_thread
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8040000
+Loading Linux: 'linux' dtb: ''
+install_linux_devices@main.c:651 module name: map_frame_hack
+install_linux_devices@main.c:651 module name: init_ram
+[top_impl_Instance_src_process_src_thread] Sending 1 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 2 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 3 on event data port write_port
+install_linux_devices@main.c:651 module name: virtio_con
+install_linux_devices@main.c:651 module name: cross_vm_connections
+[top_impl_Instance_src_process_src_thread] Sending 4 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 5 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 6 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 7 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 8 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 9 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 10 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 11 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 12 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 13 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 14 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 15 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 16 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 17 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 18 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 19 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 20 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 21 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 22 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 23 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 24 on event data port write_port
+libsel4muslcsys: Error attempting syscall 215
+[top_impl_Instance_src_process_src_thread] Sending 25 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 26 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 27 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 28 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 29 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 30 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 31 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 32 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 33 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 34 on event data port write_port
+libsel4muslcsys: Error attempting syscall 215
+[top_impl_Instance_src_process_src_thread] Sending 35 on event data port write_port
+clean_up@fdtgen.c:364 Non-existing node None specified to be kept
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+_utspace_split_alloc@split.c:266 Failed to find any untyped capable of creating an object at address 0x8020000
+alloc_vm_device_cap@main.c:938 Grabbing the entire cap for device memory
+alloc_vm_device_cap@main.c:941 Failed to grab the entire cap
+[top_impl_Instance_src_process_src_thread] Sending 36 on event data port write_port
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[top_impl_Instance_src_process_src_thread] Sending 37 on event data port write_port
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+consume_connection_event@cross_vm_connection.c:241 Failed to inject connection irq
+[    3.302183] Unable to detect cache hierarchy for CPU 0
+[    3.323000] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    3.339063] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    3.354193] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    3.367363] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    3.387497] mousedev: PS/2 mouse device common for all mice
+[    3.410062] ledtrig-cpu: registered to indicate activity on CPUs
+[    3.425792] dmi-sysfs: dmi entry is absent.
+[    3.437595] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.456504] NET: Registered protocol family 10
+[    3.488567] mip6: Mobile IPv6
+[    3.504582] NET: Registered protocol family 17
+[    3.516003] mpls_gso: MPLS GSO support
+[    3.526049] Registered cp15_barrier emulation handler
+[    3.537695] Registered setend emulation handler
+[    3.554403] registered taskstats version 1
+[    3.566290] zswap: loaded using pool lzo/zbud
+[    3.583221] ima: No TPM chip found, activating TPM-bypass!
+[    3.594643] ima: Allocated hash algorithm: sha256
+[    3.617650] hctosys: unable to open rtc device (rtc0)
+[    3.630145] PM: Hibernation image not present or could not be loaded.
+[    3.643323] initcall clk_disable_unused blacklisted
+[    3.690494] Freeing unused kernel memory: 3776K
+[top_impl_Instance_src_process_src_thread] Sending 38 on event data port write_port
+[top_impl_Instance_src_process_src_thread] Sending 39 on event data port write_port
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: [top_impl_Instance_src_process_src_thread] Sending 40 on event data port write_port
+OK
+Initializing random number generator... [    8.594191] random: dd: uninitialized urandom read (512 bytes read)
+done.
+[top_impl_Instance_src_process_src_thread] Sending 41 on event data port write_port
+Starting network: OK
+[   10.231103] connection: loading out-of-tree module taints kernel.
+[   10.279780] Event Bar (dev-0) initalised
+[   10.291475] 2 Dataports (dev-0) initalised
+[   10.321163] Event Bar (dev-1) initalised
+[   10.342784] 2 Dataports (dev-1) initalised
+[top_impl_Instance_src_process_src_thread] Sending 42 on event data port write_port
+
+Welcome to Buildroot
+buildroot login: [top_impl_Instance_src_process_src_thread] Sending 43 on event data port write_port
+ro[top_impl_Instance_src_process_src_thread] Sending 44 on event data port write_port
+ot
+# [top_impl_Instance_src_process_src_thread] Sending 45 on event data port write_port
+# vmdst_process [top_impl_Instance_src_process_src_thread] Sending 46 on event data port write_port
+
+VM App vmconsumer started
+Setting up incoming data port /dev/uio0 with size 4096
+Successfully setup incoming data port /dev/uio0
+Setting up incoming event data port /dev/uio1 with size 4096
+Successfully setup incoming event data port /dev/uio1
+Hello from vmconsumer's run method
+vmconsumer: Received 46 bits on read_port
+[top_impl_Instance_src_process_src_thread] Sending 47 on event data port write_port
+vmconsumer: Received 47 bits on read_port
+[top_impl_Instance_src_process_src_thread] Sending 48 on event data port write_port
+vmconsumer: Received 48 bits on read_port
+[top_impl_Instance_src_process_src_thread] Sending 49 on event data port write_port
+vmconsumer: Received 49 bits on read_port
+[top_impl_Instance_src_process_src_thread] Sending 50 on event data port write_port
+vmconsumer: Received 50 bits on read_port
+[top_impl_Instance_src_process_src_thread] Sending 51 on event data port write_port
+vmconsumer: Received 51 bits on read_port
+QEMU: Terminated
 ```
 <!--example-output-sel4_end-->
 
