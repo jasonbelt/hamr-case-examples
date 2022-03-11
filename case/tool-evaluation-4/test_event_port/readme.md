@@ -1,145 +1,261 @@
-**Table of Contents**
+# test_event_port
 
-- [AADL Event Port](#aadl-event-ports)
-  * [HAMR Code Generation for seL4 [CASE Phase 1 - Trusted Build Version]](#hamr-code-generation-for-sel4-case-phase-1---trusted-build-version)
-  * [HAMR Code Generation for seL4 [CASE Phase 2]](#hamr-code-generation-for-sel4-case-phase-2)
-  * [Outline of Argument for Correctness of Translation, Preservation of Information Flow, and Cyber-Resiliency](#outline-of-argument-for-correctness-of-translation-preservation-of-information-flow-and-cyber-resiliency)
-- [Running HAMR](#running-hamr)
-
-# AADL Event Ports
-
-![arch](diagrams/arch.png)
-
-This example illustrates how AADL event ports are represented using seL4 
-artifacts. AADL event ports (and associated connections between ports) are
-used to model one-way queued signaling between components. Intuitively, a 
-component with an AADL out event port can send a signal/notification out 
-of the port; a component with an AADL in event port can retrieve the signals 
-from the queue associated with the port (each incoming event port has a 
-distinct queue/buffer).  AADL event port communication behaves exactly 
-as event data port communication, except the events sent between 
-components have no user data payloads in the case of event ports.  As 
-specified by AADL semantics, arrival of an event on an in event port 
-can be set to trigger a dispatch of the consuming thread. Therefore, AADL 
-threads that have in event ports are typically event-triggered (declared 
-with a SPORADIC AADL dispatch mode and dispatched upon arrival of information 
-on an AADL event or event data port). With a SPORADIC dispatch mode, a 
-minimum separation time between event arrivals is also specified.  Messages 
-arriving before the minimum interval expires are dropped (providing some 
-protection from denial of service situations where incoming messages may 
-flood a component).  A typical computation pattern is that when a thread is 
-dispatched via event arrival, it may make calls from the user code to read 
-the current values of data ports (optional) and then take some appropriate
-action. The user code action of sending an event is always non-blocking; if
-a receiving component’s event queue is full, a message is dropped according
-to a policy specified as a property in the model in the input port (e.g., drop 
-newest event, drop oldest event, etc.)  AADL properties can be attached to
-ports/connections to indicate latency bounds on propagation of events from 
-out event ports to connected in ports (scheduling of threads/communication 
-necessary to achieve these bounds is outside the scope of CASE).  A variety 
-of AADL properties can be used to state priorities regarding which input 
-event ports within a component trigger the dispatching of the thread.
-
-Components can have any number of out event ports and in event ports.  This example 
-represents a simple producer-consumer pattern, with a single out event port on the 
-producer and a single in event port on the consumer.   Specifically, the model 
-contains two AADL threads `src` and `snk` that are instances of 
-[emitter.impl](test_event_port.aadl#L15-L16)
-and 
-[consumer.impl](test_event_port.aadl#L29-L30)
-respectively. The AADL port connection 
-[conn1](test_event_port.aadl#L46)
-connects `src`'s outgoing 
-[e](test_event_port.aadl#L7)
-event port to `snk`'s incoming 
-[s](test_event_port.aadl#L20)
-event port.
+ Table of Contents
+<!--table-of-contents_start-->
+  * [AADL Architecture](#aadl-architecture)
+  * [SeL4_TB](#sel4_tb)
+    * [HAMR Configuration: SeL4_TB](#hamr-configuration-sel4_tb)
+    * [Behavior Code: SeL4_TB](#behavior-code-sel4_tb)
+    * [How to Build/Run: SeL4_TB](#how-to-buildrun-sel4_tb)
+    * [Example Output: SeL4_TB](#example-output-sel4_tb)
+    * [CAmkES Architecture: SeL4_TB](#camkes-architecture-sel4_tb)
+    * [HAMR CAmkES Architecture: SeL4_TB](#hamr-camkes-architecture-sel4_tb)
+  * [SeL4_Only](#sel4_only)
+    * [HAMR Configuration: SeL4_Only](#hamr-configuration-sel4_only)
+    * [Behavior Code: SeL4_Only](#behavior-code-sel4_only)
+    * [How to Build/Run: SeL4_Only](#how-to-buildrun-sel4_only)
+    * [Example Output: SeL4_Only](#example-output-sel4_only)
+    * [CAmkES Architecture: SeL4_Only](#camkes-architecture-sel4_only)
+    * [HAMR CAmkES Architecture: SeL4_Only](#hamr-camkes-architecture-sel4_only)
+<!--table-of-contents_end-->
 
 
-## HAMR Code Generation for seL4 [CASE Phase 1 - Trusted Build Version]
+## AADL Architecture
+<!--aadl-architecture_start-->
+![AADL Arch](aadl/diagrams/aadl-arch.png)
+|System: [top_impl_Instance](aadl/test_event_port.aadl#L53) Properties|
+|--|
+|Domain Scheduling|
 
-*HAMR generated code is contained in the [CAmkES_seL4_TB](CAmkES_seL4_TB) directory*
-
-HAMR transforms each AADL thread into separate CAmkES 
-components.  The top-level CAmkES topology for the translated example 
-can be found in 
-[test_event_port.camkes](CAmkES_seL4_TB/test_event_port.camkes). For example, the AADL `src` thread is translated 
-to 
-[emitter_impl.camkes](CAmkES_seL4_TB/components/emitter_impl/emitter_impl.camkes), 
-and the AADL `dest` thread is translated to 
-[consumer_impl.camkes](CAmkES_seL4_TB/components/consumer_impl/consumer_impl.camkes)
-.  The queue size of `s` is 1 (the default value when not specified in the AADL model) so
-an *seL4Notification* connection
-[conn1](CAmkES_seL4_TB/test_event_port.camkes#L10) is used to allow `src` to signal/notify
-`dest` that an event has been sent, which will result in `dest` being dispatched.  If the
-queue size is greater than one then a monitor component will be used (similar to the
-monitors used for 
-[event data ports](../test_event_data_port#hamr-code-generation-for-sel4-case-phase-1---trusted-build-version)).
-
-HAMR also generates “glue code” on both the 
-producer side 
-[sb_emitter_impl.c](CAmkES_seL4_TB/components/emitter_impl/src/sb_emitter_impl.c)
-and consumer side 
-[sb_consumer_impl.c](CAmkES_seL4_TB/components/consumer_impl/src/sb_consumer_impl.c)
-to isolate the application code of both components from some of the 
-details of interacting with lower-level CAmkES/seL4 APIs.
+|[src](aadl/test_event_port.aadl#L5) Properties|
+|--|
+|Native|
+|Periodic: 1000 ms|
 
 
-## HAMR Code Generation for seL4 [CASE Phase 2]
+|[snk](aadl/test_event_port.aadl#L19) Properties|
+|--|
+|Native|
+|Sporadic|
 
-*HAMR generated code is contained in the [CAmkES_seL4_Only](CAmkES_seL4_Only) directory*
+<!--aadl-architecture_end-->
 
-HAMR transforms each AADL thread into separate CAmkES 
-components.  The top-level CAmkES topology for the translated example 
-can be found in 
-[test_event_port.camkes](CAmkES_seL4_Only/test_event_port.camkes). For example, the AADL `src` thread is translated 
-to 
-[emitter_impl.camkes](CAmkES_seL4_Only/components/emitter_impl/emitter_impl.camkes), 
-and the AADL `dest` thread is translated to 
-[consumer_impl.camkes](CAmkES_seL4_Only/components/consumer_impl/consumer_impl.camkes)
-. 
 
-The new translation for event port connections replaces the monitor component 
-(when queue sizes are greater than 1) with a shared counter that
-the receiving component can use to determine the number of events that
-were transmitted (e.g. 
-[conn2](CAmkES_seL4_Only/test_event_port.camkes#L11)).  seL4 
-[memory protections](CAmkES_seL4_Only/test_event_port.camkes#L15-L16)
-are used to ensure that the producer can only send events
-and the consumer can only retrieve events. An *seL4Notification* connection
-[conn1](CAmkES_seL4_Only/test_event_port.camkes#L10) allows `src` to signal/notify
-`dest` that it has transmitted events, which will result in `dest` being dispatched.
+## SeL4_TB
+<!--SeL4_TB_start--><!--SeL4_TB_end-->
 
-HAMR also generates “glue code” on both the 
-producer side 
-[sb_emitter_impl.c](CAmkES_seL4_Only/components/emitter_impl/src/sb_emitter_impl.c)
-and consumer side 
-[sb_consumer_impl.c](CAmkES_seL4_Only/components/consumer_impl/src/sb_consumer_impl.c)
-to isolate the application code of both components from some of the 
-details of interacting with lower-level CAmkES/seL4 APIs.
+### HAMR Configuration: SeL4_TB
+<!--hamr-configuration-sel4_tb_start-->
+To run HAMR Codegen, select [this](aadl/test_event_port.aadl#L53) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
 
-## Outline of Argument for Correctness of Translation, Preservation of Information Flow, and Cyber-Resiliency
+Option Name|Value |
+|--|--|
+Platform|SeL4_TB|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_TB/camkes
 
-(Documentation is forth-coming)
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
 
-# Running HAMR
 
-1. Install [FM-IDE](https://github.com/loonwerks/formal-methods-workbench/releases)
 
-2. Import this project into FM-IDE (by pointing to the directory containing [.project](.project))
+<details>
 
-3. Switch to the AADL perspective (from the menu bar select *Window >> Perspective >> Open Perspective >> AADL*)
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
 
-4. Open [test_event_port.aadl](test_event_port.aadl) and in the Outline view select the system implementation *top.impl*
+The script [aadl/bin/run-hamr-SeL4_TB.sh](aadl/bin/run-hamr-SeL4_TB.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
 
-5. Run *Resolint* (from the menu bar select *Analyses >> Resolint*).  It should report no errors were found with the model.
+```
+./aadl/bin/run-hamr-SeL4_TB.sh <path-to-FMIDE-executable>
+```
 
-6. With *top.impl* still selected in the outline view, click the *HAMR* icon in the toolbar
+</details>
+<!--hamr-configuration-sel4_tb_end-->
 
-7. For *Platform*, select *seL4_TB* to generate CAmkES code using *Trusted Build* style port/connection translations, or *seL4_Only* to generate CAmkES code using *System Build* style port/connection translations.
 
-8. Select an output directory where the generated CAmkES code will be written to.  The *Aux Code Directory for CAmkES* should be left blank.
+### Behavior Code: SeL4_TB
+<!--behavior-code-sel4_tb_start-->
+  * [src](aadl/behavior_code/components/Emitter/src/emitter.c)
 
-9. Click *Run*
+  * [snk](aadl/behavior_code/components/Consumer/src/consumer.c)
+<!--behavior-code-sel4_tb_end-->
 
-![example configuration](diagrams/hamr_options.png)
+
+### How to Build/Run: SeL4_TB
+<!--how-to-buildrun-sel4_tb_start-->
+```
+./hamr_seL4_TB/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_tb_end-->
+
+
+### Example Output: SeL4_TB
+<!--example-output-sel4_tb_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+[test_event_port_src] test_event_port_emitter_component_init called
+[test_event_port_snk] test_event_port_consumer_component_init called
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 1 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 2 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 3 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 4 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 5 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 6 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 7 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 8 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 9 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 10 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 11 total
+
+```
+<!--example-output-sel4_tb_end-->
+
+
+### CAmkES Architecture: SeL4_TB
+<!--camkes-architecture-sel4_tb_start-->
+![CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-arch-SeL4_TB.svg)
+<!--camkes-architecture-sel4_tb_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_TB
+<!--hamr-camkes-architecture-sel4_tb_start-->
+![HAMR CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-HAMR-arch-SeL4_TB.svg)
+<!--hamr-camkes-architecture-sel4_tb_end-->
+
+
+## SeL4_Only
+<!--SeL4_Only_start--><!--SeL4_Only_end-->
+
+### HAMR Configuration: SeL4_Only
+<!--hamr-configuration-sel4_only_start-->
+To run HAMR Codegen, select [this](aadl/test_event_port.aadl#L53) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
+
+Option Name|Value |
+|--|--|
+Platform|SeL4_Only|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_Only/camkes
+
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
+
+
+
+<details>
+
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
+
+The script [aadl/bin/run-hamr-SeL4_Only.sh](aadl/bin/run-hamr-SeL4_Only.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4_Only.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_only_end-->
+
+
+### Behavior Code: SeL4_Only
+<!--behavior-code-sel4_only_start-->
+  * [src](aadl/behavior_code/components/Emitter/src/emitter.c)
+
+  * [snk](aadl/behavior_code/components/Consumer/src/consumer.c)
+<!--behavior-code-sel4_only_end-->
+
+
+### How to Build/Run: SeL4_Only
+<!--how-to-buildrun-sel4_only_start-->
+```
+./hamr_seL4_Only/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_only_end-->
+
+
+### Example Output: SeL4_Only
+<!--example-output-sel4_only_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+[test_event_port_src] test_event_port_emitter_component_init called
+[test_event_port_snk] test_event_port_consumer_component_init called
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 1 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 2 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 3 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 4 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 5 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 6 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 7 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 8 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 9 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 10 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 11 total
+---------------------------------------
+[test_event_port_src] Sent event.
+[test_event_port_snk] Callback fired.  Received 1 events this dispatch, 12 total
+
+```
+<!--example-output-sel4_only_end-->
+
+
+### CAmkES Architecture: SeL4_Only
+<!--camkes-architecture-sel4_only_start-->
+![CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-arch-SeL4_Only.svg)
+<!--camkes-architecture-sel4_only_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_Only
+<!--hamr-camkes-architecture-sel4_only_start-->
+![HAMR CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-HAMR-arch-SeL4_Only.svg)
+<!--hamr-camkes-architecture-sel4_only_end-->
+

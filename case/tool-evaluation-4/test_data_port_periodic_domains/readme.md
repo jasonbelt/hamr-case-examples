@@ -1,101 +1,373 @@
 # test_data_port_periodic_domains
 
-vagrant@debian-10:~/CASE/camkes-project/$ ln -s ~/CASE/CASE_loonwerks/TA5/tool-evaluation-4/HAMR/examples/test_data_port_periodic_domains/CAmkES_seL4_Only/ projects/camkes/apps/tdppd_lw
+ Table of Contents
+<!--table-of-contents_start-->
+  * [AADL Architecture](#aadl-architecture)
+  * [SeL4_TB](#sel4_tb)
+    * [HAMR Configuration: SeL4_TB](#hamr-configuration-sel4_tb)
+    * [Behavior Code: SeL4_TB](#behavior-code-sel4_tb)
+    * [How to Build/Run: SeL4_TB](#how-to-buildrun-sel4_tb)
+    * [Example Output: SeL4_TB](#example-output-sel4_tb)
+    * [CAmkES Architecture: SeL4_TB](#camkes-architecture-sel4_tb)
+    * [HAMR CAmkES Architecture: SeL4_TB](#hamr-camkes-architecture-sel4_tb)
+  * [SeL4_Only](#sel4_only)
+    * [HAMR Configuration: SeL4_Only](#hamr-configuration-sel4_only)
+    * [Behavior Code: SeL4_Only](#behavior-code-sel4_only)
+    * [How to Build/Run: SeL4_Only](#how-to-buildrun-sel4_only)
+    * [Example Output: SeL4_Only](#example-output-sel4_only)
+    * [CAmkES Architecture: SeL4_Only](#camkes-architecture-sel4_only)
+    * [HAMR CAmkES Architecture: SeL4_Only](#hamr-camkes-architecture-sel4_only)
+  * [SeL4](#sel4)
+    * [HAMR Configuration: SeL4](#hamr-configuration-sel4)
+    * [Behavior Code: SeL4](#behavior-code-sel4)
+    * [How to Build/Run: SeL4](#how-to-buildrun-sel4)
+    * [Example Output: SeL4](#example-output-sel4)
+    * [CAmkES Architecture: SeL4](#camkes-architecture-sel4)
+    * [HAMR CAmkES Architecture: SeL4](#hamr-camkes-architecture-sel4)
+<!--table-of-contents_end-->
 
-vagrant@debian-10:~/CASE/camkes-project/$ mkdir tdppd_lw_build_sim
 
-vagrant@debian-10:~/CASE/camkes-project/$ cd tdppd_lw_build_sim
+## AADL Architecture
+<!--aadl-architecture_start-->
+![AADL Arch](aadl/diagrams/aadl-arch.png)
+|System: [top_impl_Instance](aadl/test_data_port_periodic_domains.aadl#L99) Properties|
+|--|
+|Domain Scheduling|
 
-vagrant@debian-10:~/CASE/camkes-project/tdppd_lw_build_sim$ ../init-build.sh -DPLATFORM=pc99 -DSIMULATION=1 -DCAMKES_APP=tdppd_lw
-vagrant@debian-10:~/CASE/camkes-project/tdppd_lw_build_sim$ ninja
-
-vagrant@debian-10:~/CASE/camkes-project/tdppd_lw_build_sim$ ./simulate
-./simulate: qemu-system-x86_64  -cpu Nehalem,-vme,+pdpe1gb,-xsave,-xsaveopt,-xsavec,-fsgsbase,-invpcid,enforce -nographic -serial mon:stdio -m size=512M  -kernel images/kernel-x86_64-pc99 -initrd images/capdl-loader-image-x86_64-pc99 cSeaBIOS (version 1.12.0-1)
-
-
-iPXE (http://ipxe.org) 00:03.0 C980 PCI2.10 PnP PMM+1FF8FFA0+1FECFFA0 C980
-                                                                               
+|[source_thread_component](aadl/test_data_port_periodic_domains.aadl#L18) Properties|
+|--|
+|Native|
+|Periodic: 1000 ms|
+|Domain: 2|
 
 
-Booting from ROM..Boot config: debug_port = 0x3f8
-Boot config: disable_iommu = false
-Detected 1 boot module(s):
-  module #0: start=0xa1b000 end=0xc3b310 size=0x220310 name='images/capdl-loader-image-x86_64-pc99'
-Parsing GRUB physical memory map
-	Physical Memory Region from 0 size 9fc00 type 1
-	Physical Memory Region from 9fc00 size 400 type 2
-	Physical Memory Region from f0000 size 10000 type 2
-	Physical Memory Region from 100000 size 1fee0000 type 1
-Adding physical memory region 0x100000-0x1ffe0000
-	Physical Memory Region from 1ffe0000 size 20000 type 2
-	Physical Memory Region from fffc0000 size 40000 type 2
-Multiboot gave us no video information
-ACPI: RSDP paddr=0xf58d0
-ACPI: RSDP vaddr=0xf58d0
-ACPI: RSDT paddr=0x1ffe156f
-ACPI: RSDT vaddr=0x1ffe156f
-Kernel loaded to: start=0x100000 end=0xa1a000 size=0x91a000 entry=0x10125e
-ACPI: RSDT paddr=0x1ffe156f
-ACPI: RSDT vaddr=0x1ffe156f
-ACPI: FADT paddr=0x1ffe144b
-ACPI: FADT vaddr=0x1ffe144b
-ACPI: FADT flags=0x80a5
-ACPI: MADT paddr=0x1ffe14bf
-ACPI: MADT vaddr=0x1ffe14bf
-ACPI: MADT apic_addr=0xfee00000
-ACPI: MADT flags=0x1
-ACPI: MADT_APIC apic_id=0x0
-ACPI: MADT_IOAPIC ioapic_id=0 ioapic_addr=0xfec00000 gsib=0
-ACPI: MADT_ISO bus=0 source=0 gsi=2 flags=0x0
-ACPI: MADT_ISO bus=0 source=5 gsi=5 flags=0xd
-ACPI: MADT_ISO bus=0 source=9 gsi=9 flags=0xd
-ACPI: MADT_ISO bus=0 source=10 gsi=10 flags=0xd
-ACPI: MADT_ISO bus=0 source=11 gsi=11 flags=0xd
-ACPI: 1 CPU(s) detected
-ELF-loading userland images from boot modules:
-size=0x28a000 v_entry=0x40834f v_start=0x400000 v_end=0x68a000 p_start=0xc3c000 p_end=0xec6000
-Moving loaded userland images to final location: from=0xc3c000 to=0xa1a000 size=0x28a000
-Starting node #0 with APIC ID 0
-Mapping kernel window is done
+|[destination_thread_component](aadl/test_data_port_periodic_domains.aadl#L53) Properties|
+|--|
+|Native|
+|Periodic: 1000 ms|
+|Domain: 3|
+
+
+**Schedule:** [domain_schedule.c](aadl/behavior_code/kernel/domain_schedule.c)
+<!--aadl-architecture_end-->
+
+
+## SeL4_TB
+<!--SeL4_TB_start--><!--SeL4_TB_end-->
+
+### HAMR Configuration: SeL4_TB
+<!--hamr-configuration-sel4_tb_start-->
+To run HAMR Codegen, select [this](aadl/test_data_port_periodic_domains.aadl#L99) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
+
+Option Name|Value |
+|--|--|
+Platform|SeL4_TB|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_TB/camkes
+
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
+
+
+
+<details>
+
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
+
+The script [aadl/bin/run-hamr-SeL4_TB.sh](aadl/bin/run-hamr-SeL4_TB.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4_TB.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_tb_end-->
+
+
+### Behavior Code: SeL4_TB
+<!--behavior-code-sel4_tb_start-->
+  * [source_thread_component](aadl/behavior_code/components/source/src/source.c)
+
+  * [destination_thread_component](aadl/behavior_code/components/destination/src/destination.c)
+<!--behavior-code-sel4_tb_end-->
+
+
+### How to Build/Run: SeL4_TB
+<!--how-to-buildrun-sel4_tb_start-->
+```
+./hamr_seL4_TB/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_tb_end-->
+
+
+### Example Output: SeL4_TB
+<!--example-output-sel4_tb_start-->
+Timeout = 18 seconds
+```
 Booting all finished, dropped to user space
-pacer: Period tick 1
-pacer: Period tick 2
-[source_thread_component] test_data_port_periodic_source_component_init called
-[destination_thread_component] test_data_port_periodic_domains_destination_component_init called
-[pacer: Period tick 3
+[source_process_component_source_thread_component] test_data_port_periodic_source_component_init called
+[destination_process_component_destination_thread_component] test_data_port_periodic_domains_destination_component_init called
 ---------------------------------------
-[source_thread_component] Sent 0
-----destination_thread_component] value {0}
-[destination_thread_component] value {1}
-pacer: Period tick 4
------------------------------------
-[source_thread_component] Sent 1
+[source_process_component_source_thread_component] Sent 0
+[destination_process_component_destination_thread_component] value {0}
 ---------------------------------------
-[source_thread_component] Sent 2
-[destination_thread_component] value {2}
-pacer: Period tick 5
+[source_process_component_source_thread_component] Sent 1
+[destination_process_component_destination_thread_component] value {1}
 ---------------------------------------
-[source_thread_component] Sent 3
-[destination_thread_component] value {3}
-pacer: Period tick 6
+[source_process_component_source_thread_component] Sent 2
+[destination_process_component_destination_thread_component] value {2}
 ---------------------------------------
-[source_thread_component] Sent 4
-[destination_thread_component] value {4}
-pacer: Period tick 7
+[source_process_component_source_thread_component] Sent 3
+[destination_process_component_destination_thread_component] value {3}
 ---------------------------------------
-[source_thread_component] Sent 5
-[destination_thread_component] value {5}
-pacer: Period tick 8
+[source_process_component_source_thread_component] Sent 4
+[destination_process_component_destination_thread_component] value {4}
 ---------------------------------------
-[source_thread_component] Sent 6
-[destination_thread_component] value {6}
-pacer: Period tick 9
+[source_process_component_source_thread_component] Sent 5
+[destination_process_component_destination_thread_component] value {5}
 ---------------------------------------
-[source_thread_component] Sent 7
-[destination_thread_component] value {7}
-pacer: Period tick 10
+[source_process_component_source_thread_component] Sent 6
+[destination_process_component_destination_thread_component] value {6}
 ---------------------------------------
-[source_thread_component] Sent 8
-[destination_thread_component] value {8}
-pacer: Period tick 11
+[source_process_component_source_thread_component] Sent 7
+[destination_process_component_destination_thread_component] value {7}
 ---------------------------------------
+[source_process_component_source_thread_component] Sent 8
+[destination_process_component_destination_thread_component] value {8}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 9
+[destination_process_component_destination_thread_component] value {9}
+
+```
+<!--example-output-sel4_tb_end-->
+
+
+### CAmkES Architecture: SeL4_TB
+<!--camkes-architecture-sel4_tb_start-->
+![CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-arch-SeL4_TB.svg)
+<!--camkes-architecture-sel4_tb_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_TB
+<!--hamr-camkes-architecture-sel4_tb_start-->
+![HAMR CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-HAMR-arch-SeL4_TB.svg)
+<!--hamr-camkes-architecture-sel4_tb_end-->
+
+
+## SeL4_Only
+<!--SeL4_Only_start--><!--SeL4_Only_end-->
+
+### HAMR Configuration: SeL4_Only
+<!--hamr-configuration-sel4_only_start-->
+To run HAMR Codegen, select [this](aadl/test_data_port_periodic_domains.aadl#L99) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
+
+Option Name|Value |
+|--|--|
+Platform|SeL4_Only|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_Only/camkes
+
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
+
+
+
+<details>
+
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
+
+The script [aadl/bin/run-hamr-SeL4_Only.sh](aadl/bin/run-hamr-SeL4_Only.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4_Only.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_only_end-->
+
+
+### Behavior Code: SeL4_Only
+<!--behavior-code-sel4_only_start-->
+  * [source_thread_component](aadl/behavior_code/components/source/src/source.c)
+
+  * [destination_thread_component](aadl/behavior_code/components/destination/src/destination.c)
+<!--behavior-code-sel4_only_end-->
+
+
+### How to Build/Run: SeL4_Only
+<!--how-to-buildrun-sel4_only_start-->
+```
+./hamr_seL4_Only/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_only_end-->
+
+
+### Example Output: SeL4_Only
+<!--example-output-sel4_only_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+[destination_process_component_destination_thread_component] test_data_port_periodic_domains_destination_component_init called
+[source_process_component_source_thread_component] test_data_port_periodic_source_component_init called
+---------------------------------------
+[source_process_component_source_thread_component] Sent 0
+[destination_process_component_destination_thread_component] value {0}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 1
+[destination_process_component_destination_thread_component] value {1}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 2
+[destination_process_component_destination_thread_component] value {2}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 3
+[destination_process_component_destination_thread_component] value {3}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 4
+[destination_process_component_destination_thread_component] value {4}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 5
+[destination_process_component_destination_thread_component] value {5}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 6
+[destination_process_component_destination_thread_component] value {6}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 7
+[destination_process_component_destination_thread_component] value {7}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 8
+[destination_process_component_destination_thread_component] value {8}
+---------------------------------------
+[source_process_component_source_thread_component] Sent 9
+[destination_process_component_destination_thread_component] value {9}
+
+```
+<!--example-output-sel4_only_end-->
+
+
+### CAmkES Architecture: SeL4_Only
+<!--camkes-architecture-sel4_only_start-->
+![CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-arch-SeL4_Only.svg)
+<!--camkes-architecture-sel4_only_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_Only
+<!--hamr-camkes-architecture-sel4_only_start-->
+![HAMR CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-HAMR-arch-SeL4_Only.svg)
+<!--hamr-camkes-architecture-sel4_only_end-->
+
+
+## SeL4
+<!--SeL4_start--><!--SeL4_end-->
+
+### HAMR Configuration: SeL4
+<!--hamr-configuration-sel4_start-->
+To run HAMR Codegen, select [this](aadl/test_data_port_periodic_domains.aadl#L99) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
+
+Option Name|Value |
+|--|--|
+Platform|SeL4|
+Output Directory|_&lt;example-dir&gt;_/hamr_seL4/slang|
+Base Package Name|test_data_port_periodic_domains|
+|Exclude Slang Component Implementations|True/Checked|
+|Bit Width|32|
+|Max Sequence Size|1|
+|Max String Size|256|
+|C Output Directory|_&lt;example-dir&gt;_/hamr_seL4/c|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4/camkes
+
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
+
+
+
+<details>
+
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
+
+The script [aadl/bin/run-hamr-SeL4.sh](aadl/bin/run-hamr-SeL4.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_end-->
+
+
+### Behavior Code: SeL4
+<!--behavior-code-sel4_start-->
+  * [source_thread_component](hamr_seL4/c/ext-c/source_thread_impl_source_process_component_source_thread_component/source_thread_impl_source_process_component_source_thread_component.c)
+
+  * [destination_thread_component](hamr_seL4/c/ext-c/destination_thread_impl_destination_process_component_destination_thread_component/destination_thread_impl_destination_process_component_destination_thread_component.c)
+<!--behavior-code-sel4_end-->
+
+
+### How to Build/Run: SeL4
+<!--how-to-buildrun-sel4_start-->
+If you didn't configure HAMR's FMIDE plugin to run the transpiler automatically then run
+```
+./hamr_seL4/slang/bin/transpile-sel4.cmd
+```
+then
+
+```
+./hamr_seL4/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_end-->
+
+
+### Example Output: SeL4
+<!--example-output-sel4_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+Entering pre-init of destination_thread_impl_destination_process_cEntering pre-init of source_thread_impl_source_process_component_source_thread_component
+omponent_destination_thread_component
+Leaving pre-init of destination_thread_impl_destination_process_component_destination_thread_component
+top_impl_Instance_source_process_component_source_thread_component: Initialized write port with: 0
+Leaving pre-init of source_thread_impl_source_process_component_source_thread_component
+top_impl_Instance_destination_process_component_destination_thread_component: Received 0 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 1
+top_impl_Instance_destination_process_component_destination_thread_component: Received 1 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 2
+top_impl_Instance_destination_process_component_destination_thread_component: Received 2 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 3
+top_impl_Instance_destination_process_component_destination_thread_component: Received 3 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 4
+top_impl_Instance_destination_process_component_destination_thread_component: Received 4 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 5
+top_impl_Instance_destination_process_component_destination_thread_component: Received 5 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 6
+top_impl_Instance_destination_process_component_destination_thread_component: Received 6 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 7
+top_impl_Instance_destination_process_component_destination_thread_component: Received 7 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 8
+top_impl_Instance_destination_process_component_destination_thread_component: Received 8 on data port read_port
+top_impl_Instance_source_process_component_source_thread_component: Sent: 9
+top_impl_Instance_destination_process_component_destination_thread_component: Received 9 on data port read_port
+
+```
+<!--example-output-sel4_end-->
+
+
+### CAmkES Architecture: SeL4
+<!--camkes-architecture-sel4_start-->
+![CAmkES Architecture: SeL4](aadl/diagrams/CAmkES-arch-SeL4.svg)
+<!--camkes-architecture-sel4_end-->
+
+
+### HAMR CAmkES Architecture: SeL4
+<!--hamr-camkes-architecture-sel4_start-->
+![HAMR CAmkES Architecture: SeL4](aadl/diagrams/CAmkES-HAMR-arch-SeL4.svg)
+<!--hamr-camkes-architecture-sel4_end-->
+

@@ -1,194 +1,731 @@
-**Table of Contents**
+# simple_uav
 
-- [Simple UAV](#simple-uav)
-  * [HAMR Code Generation for seL4 [CASE Phase 1 - Trusted Build Version]](#hamr-code-generation-for-sel4-case-phase-1---trusted-build-version)
-  * [HAMR Code Generation for seL4 [CASE Phase 2]](#hamr-code-generation-for-sel4-case-phase-2)
-  * [Outline of Argument for Correctness of Translation, Preservation of Information Flow, and Cyber-Resiliency](#outline-of-argument-for-correctness-of-translation-preservation-of-information-flow-and-cyber-resiliency)
-- [Running HAMR](#running-hamr)
-
-# Simple UAV
-
-![arch](diagrams/arch.png)
-
-This example illustrates how AADL event data ports are represented using seL4 
-artifacts. AADL event data ports (and associated connections between ports) are 
-used to model one-way queued message passing between components. Intuitively, a
-component with an AADL out event data port can send a message out of the port; 
-a component with an AADL in event data port can retrieve messages from the queue 
-associated with the port (each incoming event data port has a distinct 
-queue/buffer). As specified by AADL semantics, arrival of an event on an in 
-event data port can be set to trigger a dispatch of the consuming thread. Therefore, 
-AADL threads that have in event data ports are typically event-triggered (declared 
-with a SPORADIC AADL dispatch mode and dispatched upon arrival of information on an 
-AADL event or event data port).  With a SPORADIC dispatch mode, a minimum separation 
-time between event arrivals is also specified.  Messages arriving before the minimum 
-interval expires are dropped (providing some protection from denial of service 
-situations where incoming messages may flood a component).   A typical computation 
-pattern is that when a thread is dispatched via event arrival, it will process the 
-payload from the incoming message and also make calls from the user code to read 
-the current values of data ports. The user code action of sending a message out 
-an event data port is always non-blocking; if a receiving component’s message queue 
-is full, a message is dropped according to a policy specified as a property in the 
-model on the input port (e.g., drop newest message, drop oldest message, etc.)  AADL 
-properties can be attached to ports/connections to indicate latency bounds 
-on propagation of messages from out event data ports to connected in ports 
-(scheduling of threads/communication necessary to achieve these bounds is outside 
-the scope of CASE).  A variety of AADL properties can be used to state priorities 
-regarding which input event data ports within a component trigger the dispatching 
-of the thread. 
-
-Components can have any number of out event data ports and in event data ports.  This 
-example represents the mission computer component, `MCMP`, of a simple UAV 
-surveillance system in which all communication is handled by event data ports. A 
-ground station transmits a surveillance region and flight pattern 
-to a UAV via a radio component, `RADIO`.  The Flight Planner, `FPLN` on board 
-the mission computer takes the surveillance region and flight pattern input and 
-generates the flight mission, which is a list of waypoints the UAV must 
-follow. The Waypoint Manager, `WPM` passes the current window of waypoints to 
-the UAV Flight Controller via a UART, `UART`.
+ Table of Contents
+<!--table-of-contents_start-->
+  * [AADL Architecture](#aadl-architecture)
+  * [SeL4_TB](#sel4_tb)
+    * [HAMR Configuration: SeL4_TB](#hamr-configuration-sel4_tb)
+    * [Behavior Code: SeL4_TB](#behavior-code-sel4_tb)
+    * [How to Build/Run: SeL4_TB](#how-to-buildrun-sel4_tb)
+    * [Example Output: SeL4_TB](#example-output-sel4_tb)
+    * [CAmkES Architecture: SeL4_TB](#camkes-architecture-sel4_tb)
+    * [HAMR CAmkES Architecture: SeL4_TB](#hamr-camkes-architecture-sel4_tb)
+  * [SeL4_Only](#sel4_only)
+    * [HAMR Configuration: SeL4_Only](#hamr-configuration-sel4_only)
+    * [Behavior Code: SeL4_Only](#behavior-code-sel4_only)
+    * [How to Build/Run: SeL4_Only](#how-to-buildrun-sel4_only)
+    * [Example Output: SeL4_Only](#example-output-sel4_only)
+    * [CAmkES Architecture: SeL4_Only](#camkes-architecture-sel4_only)
+    * [HAMR CAmkES Architecture: SeL4_Only](#hamr-camkes-architecture-sel4_only)
+<!--table-of-contents_end-->
 
 
-## HAMR Code Generation for seL4 [CASE Phase 1 - Trusted Build Version]
+## AADL Architecture
+<!--aadl-architecture_start-->
+![AADL Arch](aadl/diagrams/aadl-arch.png)
+|System: [UAV_Impl_Instance](aadl/UAV.aadl#L19) Properties|
+|--|
+|Domain Scheduling|
 
-*HAMR generated code is contained in the [CAmkES_seL4_TB](CAmkES_seL4_TB) directory*
-
-HAMR transforms each AADL thread into separate CAmkES 
-components.  The top-level CAmkES topology for the translated example 
-can be found in 
-[PROC_SW.camkes](CAmkES_seL4_TB/PROC_SW.camkes). For example, the AADL 
-`RADIO` thread is an instance of
-[RadioDriver.Impl](SW.aadl#L83-L84) and is translated to 
-[RadioDriver_Impl.camkes](CAmkES_seL4_TB/components/RadioDriver_Impl/RadioDriver_Impl.camkes), 
-the `FPLN` thread is an instance of 
-[FlightPlanner.Impl](SW.aadl#L102-L103)
-and is translated to 
-[FlightPlanner_Impl.camkes](CAmkES_seL4_TB/components/FlightPlanner_Impl/FlightPlanner_Impl.camkes),
-the `WPM` thread is an instance of 
-[WaypointManager.Impl](SW.aadl#L121-L122)
-and is translated to 
-[WaypointManager_Impl.camkes](CAmkES_seL4_TB/components/WaypointManager_Impl/WaypointManager_Impl.camkes),
-and the `UART` thread is an instance of 
-[UARTDriver.Impl](SW.aadl#L136-L137)
-and is translated to
-[UARTDriver_Impl.camkes](CAmkES_seL4_TB/components/UARTDriver_Impl/UARTDriver_Impl.camkes).  
-
-Intermediary CAmkES components called monitors are introduced to facilitate the 
-queued communication over the event data ports. Each connection is handled
-by a separate monitor.  For example, the monitor 
-[sb_UART_mission_window_Monitor.camkes](CAmkES_seL4_TB/components/sb_Monitors/sb_UART_mission_window_Monitor/sb_UART_mission_window_Monitor.camkes)
-is generated for the 
-[c6](SW.aadl#L152)
-connection between the 
-`mission_window` ports of the waypoint manager and UART.  The 
-event queue is stored in the monitor and enqueue/dequeue APIs
-are provided by the interface specification
-[sb_Monitor_SW__MissionWindow_1.idl4](CAmkES_seL4_TB/interfaces/sb_Monitor_SW__MissionWindow_1.idl4).
-Both components are connected to the 
-monitor via *sel4RPCCall* connections (
-[conn10](CAmkES_seL4_TB/PROC_SW.camkes#L33) 
-and 
-[conn11](CAmkES_seL4_TB/PROC_SW.camkes#L34) 
-in the CAmkES assembly). The *seL4Notification* connection 
-[conn12](CAmkES_seL4_TB/PROC_SW.camkes#L35) allows the monitor to notify the UART
-that an event has arrived, which causes the component to be dispatched.
-
-HAMR also generates “glue code” for each component
-to isolate the application code of the components from some of the 
-details of interacting with lower-level CAmkES/seL4 APIs;
-[sb_RadioDriver_Impl.c](CAmkES_seL4_TB/components/RadioDriver_Impl/src/sb_RadioDriver_Impl.c)
-for the `RADIO` component,
-[sb_FlightPlanner_Impl.c](CAmkES_seL4_TB/components/FlightPlanner_Impl/src/sb_FlightPlanner_Impl.c)
-for the `FPLN` component,
-[sb_WaypointManager_Impl.c](CAmkES_seL4_TB/components/WaypointManager_Impl/src/sb_WaypointManager_Impl.c)
-for the `WPM` component,
-and
-[sb_UARTDriver_Impl.c](CAmkES_seL4_TB/components/UARTDriver_Impl/src/sb_UARTDriver_Impl.c)
-for the `UART`.
-
-## HAMR Code Generation for seL4 [CASE Phase 2]
-
-*HAMR generated code is contained in the [CAmkES_seL4_Only](CAmkES_seL4_Only) directory*
-
-HAMR transforms each AADL thread into separate CAmkES 
-components.  The top-level CAmkES topology for the translated example 
-can be found in 
-[PROC_SW.camkes](CAmkES_seL4_Only/PROC_SW.camkes). For example, the AADL 
-`RADIO` thread is an instance of
-[RadioDriver.Impl](SW.aadl#L83-L84) and is translated to 
-[RadioDriver_Impl.camkes](CAmkES_seL4_Only/components/RadioDriver_Impl/RadioDriver_Impl.camkes), 
-the `FPLN` thread is an instance of 
-[FlightPlanner.Impl](SW.aadl#L102-L103)
-and is translated to 
-[FlightPlanner_Impl.camkes](CAmkES_seL4_Only/components/FlightPlanner_Impl/FlightPlanner_Impl.camkes),
-the `WPM` thread is an instance of 
-[WaypointManager.Impl](SW.aadl#L121-L122)
-and is translated to 
-[WaypointManager_Impl.camkes](CAmkES_seL4_Only/components/WaypointManager_Impl/WaypointManager_Impl.camkes),
-and the `UART` thread is an instance of 
-[UARTDriver.Impl](SW.aadl#L136-L137)
-and is translated to
-[UARTDriver_Impl.camkes](CAmkES_seL4_Only/components/UARTDriver_Impl/UARTDriver_Impl.camkes).  
-
-The new translation for event data port connections uses a modified
-version of the *Trusted Build* style monitor components in which the 
-enqueue and dequeue interfaces have been split into separate procedures.  This
-ensures that a sender can only write to the queue and a receiver can only
-read from the queue.  For example,
-[sb_Monitor_SW__MissionWindow_1_Sender.idl4](CAmkES_seL4_Only/interfaces/sb_Monitor_SW__MissionWindow_1_Sender.idl4)
-provides the enqueue interface used by the monitor's
-[mon_send](CAmkES_seL4_Only/components/sb_Monitors/sb_UART_mission_window_Monitor/sb_UART_mission_window_Monitor.camkes#L7),
-and
-[sb_Monitor_SW__MissionWindow_1_Receiver.idl4](CAmkES_seL4_Only/interfaces/sb_Monitor_SW__MissionWindow_1_Receiver.idl4)
-provides the dequeue interface used by the monitor's
-[mon_receive](CAmkES_seL4_Only/components/sb_Monitors/sb_UART_mission_window_Monitor/sb_UART_mission_window_Monitor.camkes#L6),
-for the 
-[c6](SW.aadl#L152)
-connection between the 
-`mission_window` ports of the waypoint manager and UART.  
+|[RADIO](aadl/SW.aadl#L74) Properties|
+|--|
+|Native|
+|Sporadic|
 
 
-HAMR also generates “glue code” for each component
-to isolate the application code of the components from some of the 
-details of interacting with lower-level CAmkES/seL4 APIs;
-[sb_RadioDriver_Impl.c](CAmkES_seL4_Only/components/RadioDriver_Impl/src/sb_RadioDriver_Impl.c)
-for the `RADIO` component,
-[sb_FlightPlanner_Impl.c](CAmkES_seL4_Only/components/FlightPlanner_Impl/src/sb_FlightPlanner_Impl.c)
-for the `FPLN` component,
-[sb_WaypointManager_Impl.c](CAmkES_seL4_Only/components/WaypointManager_Impl/src/sb_WaypointManager_Impl.c)
-for the `WPM` component,
-and
-[sb_UARTDriver_Impl.c](CAmkES_seL4_Only/components/UARTDriver_Impl/src/sb_UARTDriver_Impl.c)
-for the `UART`.
+|[FPLN](aadl/SW.aadl#L86) Properties|
+|--|
+|Native|
+|Sporadic|
 
 
-(Note: A newer version of the translation removes the monitor component and 
-has the queue between the producer and consumer communicate through a shared
-memory region where seL4 memory protections are used to ensure that the
-producer can only write and the consumer can only read. The new version is 
-also more closely aligned with the semantics and APIs described in the AADL standard.)
+|[WPM](aadl/SW.aadl#L105) Properties|
+|--|
+|Native|
+|Sporadic|
 
-## Outline of Argument for Correctness of Translation, Preservation of Information Flow, and Cyber-Resiliency
 
-(Documentation is forth-coming)
+|[UART](aadl/SW.aadl#L124) Properties|
+|--|
+|Native|
+|Sporadic|
 
-# Running HAMR
+<!--aadl-architecture_end-->
 
-1. Install [FM-IDE](https://github.com/loonwerks/formal-methods-workbench/releases)
 
-2. Import this project into FM-IDE (by pointing to the directory containing [.project](.project))
+## SeL4_TB
+<!--SeL4_TB_start--><!--SeL4_TB_end-->
 
-3. Switch to the AADL perspective (from the menu bar select *Window >> Perspective >> Open Perspective >> AADL*)
+### HAMR Configuration: SeL4_TB
+<!--hamr-configuration-sel4_tb_start-->
+To run HAMR Codegen, select [this](aadl/UAV.aadl#L19) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
 
-4. Open [UAV.aadl](UAV.aadl) and in the Outline view select the system implementation *UAV.Impl*
+Option Name|Value |
+|--|--|
+Platform|SeL4_TB|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_TB/camkes
 
-5. Run *Resolint* (from the menu bar select *Analyses >> Resolint*).  It should report no errors were found with the model.
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
 
-6. With *UAV.Impl* still selected in the outline view, click the *HAMR* icon in the toolbar
 
-7. For *Platform*, select *seL4_TB* to generate CAmkES code using *Trusted Build* style port/connection translations, or *seL4_Only* to generate CAmkES code using *System Build* style port/connection translations.
 
-8. Select an output directory where the generated CAmkES code will be written to.  The *Aux Code Directory for CAmkES* should be left blank.
+<details>
 
-9. Click *Run*
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
 
-![example configuration](diagrams/hamr_options.png)
+The script [aadl/bin/run-hamr-SeL4_TB.sh](aadl/bin/run-hamr-SeL4_TB.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4_TB.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_tb_end-->
+
+
+### Behavior Code: SeL4_TB
+<!--behavior-code-sel4_tb_start-->
+  * [RADIO](aadl/behavior/radiodriver.c)
+
+  * [FPLN](aadl/behavior/flightplanner.c)
+
+  * [WPM](aadl/behavior/waypointmanager.c)
+
+  * [UART](aadl/behavior/uartdriver.c)
+<!--behavior-code-sel4_tb_end-->
+
+
+### How to Build/Run: SeL4_TB
+<!--how-to-buildrun-sel4_tb_start-->
+```
+./hamr_seL4_TB/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_tb_end-->
+
+
+### Example Output: SeL4_TB
+<!--example-output-sel4_tb_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+RDIO: initialise entry point called
+RDIO:> Sending command.
+FPLN:< Command.
+  Map     = [
+             0: {0, 1, 2}
+             1: {1, 2, 3}
+             2: {2, 3, 4}
+             3: {3, 4, 5}
+            ]
+  Pattern = 2
+  HMAC    = 1
+FPLN:> new mission notification.
+WM:< Received flight plan
+  Mission:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+    4: {4, 5, 6}
+    5: {5, 6, 7}
+    6: {6, 7, 8}
+    7: {7, 8, 9}
+    8: {8, 9, 10}
+    9: {9, 10, 11}
+WM:> Sent mission window
+UART:< Received mission window
+FPLN:< Received mission receipt confirmation: 1.
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+UART:> Sending 1 as the next id.
+WM:< Received 1 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 2 as the next id.
+WM:< Received 2 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 3 as the next id.
+WM:< Received 3 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 4 as the next id.
+WM:< Received 4 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 5 as the next id.
+WM:< Received 5 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+UART:> Sending 6 as the next id.
+WM:< Received 6 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {6, 7, 8}
+    1: {7, 8, 9}
+    2: {8, 9, 10}
+    3: {9, 10, 11}
+UART:> Sending 7 as the next id.
+WM:< Received 7 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {7, 8, 9}
+    1: {8, 9, 10}
+    2: {9, 10, 11}
+    3: {0, 1, 2}
+UART:> Sending 8 as the next id.
+WM:< Received 8 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {8, 9, 10}
+    1: {9, 10, 11}
+    2: {0, 1, 2}
+    3: {1, 2, 3}
+UART:> Sending 9 as the next id.
+WM:< Received 9 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {9, 10, 11}
+    1: {0, 1, 2}
+    2: {1, 2, 3}
+    3: {2, 3, 4}
+UART:> Sending 10 as the next id.
+WM:< Received 10 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+UART:> Sending 11 as the next id.
+WM:< Received 11 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 12 as the next id.
+WM:< Received 12 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 13 as the next id.
+WM:< Received 13 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 14 as the next id.
+WM:< Received 14 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 15 as the next id.
+WM:< Received 15 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+UART:> Sending 16 as the next id.
+WM:< Received 16 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {6, 7, 8}
+    1: {7, 8, 9}
+    2: {8, 9, 10}
+    3: {9, 10, 11}
+UART:> Sending 17 as the next id.
+WM:< Received 17 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {7, 8, 9}
+    1: {8, 9, 10}
+    2: {9, 10, 11}
+    3: {0, 1, 2}
+UART:> Sending 18 as the next id.
+WM:< Received 18 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {8, 9, 10}
+    1: {9, 10, 11}
+    2: {0, 1, 2}
+    3: {1, 2, 3}
+UART:> Sending 19 as the next id.
+WM:< Received 19 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {9, 10, 11}
+    1: {0, 1, 2}
+    2: {1, 2, 3}
+    3: {2, 3, 4}
+UART:> Sending 20 as the next id.
+WM:< Received 20 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+UART:> Sending 21 as the next id.
+WM:< Received 21 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 22 as the next id.
+WM:< Received 22 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 23 as the next id.
+WM:< Received 23 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 24 as the next id.
+WM:< Received 24 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 25 as the next id.
+WM:< Received 25 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+
+```
+<!--example-output-sel4_tb_end-->
+
+
+### CAmkES Architecture: SeL4_TB
+<!--camkes-architecture-sel4_tb_start-->
+![CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-arch-SeL4_TB.svg)
+<!--camkes-architecture-sel4_tb_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_TB
+<!--hamr-camkes-architecture-sel4_tb_start-->
+![HAMR CAmkES Architecture: SeL4_TB](aadl/diagrams/CAmkES-HAMR-arch-SeL4_TB.svg)
+<!--hamr-camkes-architecture-sel4_tb_end-->
+
+
+## SeL4_Only
+<!--SeL4_Only_start--><!--SeL4_Only_end-->
+
+### HAMR Configuration: SeL4_Only
+<!--hamr-configuration-sel4_only_start-->
+To run HAMR Codegen, select [this](aadl/UAV.aadl#L19) system implementation in FMIDE's outline view and then click the
+HAMR button in the toolbar.  Use the following values in the dialog box that opens up (_&lt;example-dir&gt;_ is the directory that contains this readme file)
+
+Option Name|Value |
+|--|--|
+Platform|SeL4_Only|
+|seL4/CAmkES Output Directory|_&lt;example-dir&gt;_/hamr_seL4_Only/camkes
+
+You can have HAMR's FMIDE plugin generate verbose output and run the transpiler by setting the ``Verbose output`` and ``Run Transpiler``
+options that are located in __Preferences >> OSATE >> Sireum HAMR >> Code Generation__.
+
+
+
+<details>
+
+<summary>Click for instructions on how to run HAMR Codegen via the command line</summary>
+
+The script [aadl/bin/run-hamr-SeL4_Only.sh](aadl/bin/run-hamr-SeL4_Only.sh) uses an experimental OSATE/FMIDE plugin we've developed that
+allows you to run HAMR's OSATE/FMIDE plugin via the command line.  It has primarily been used/tested
+when installed in OSATE (not FMIDE) and under Linux so may not work as expected in FMIDE or
+under a different operating system. The script contains instructions on how to install the plugin.
+
+```
+./aadl/bin/run-hamr-SeL4_Only.sh <path-to-FMIDE-executable>
+```
+
+</details>
+<!--hamr-configuration-sel4_only_end-->
+
+
+### Behavior Code: SeL4_Only
+<!--behavior-code-sel4_only_start-->
+  * [RADIO](aadl/behavior/radiodriver.c)
+
+  * [FPLN](aadl/behavior/flightplanner.c)
+
+  * [WPM](aadl/behavior/waypointmanager.c)
+
+  * [UART](aadl/behavior/uartdriver.c)
+<!--behavior-code-sel4_only_end-->
+
+
+### How to Build/Run: SeL4_Only
+<!--how-to-buildrun-sel4_only_start-->
+```
+./hamr_seL4_Only/camkes/bin/run-camkes.sh -s
+```
+<!--how-to-buildrun-sel4_only_end-->
+
+
+### Example Output: SeL4_Only
+<!--example-output-sel4_only_start-->
+Timeout = 18 seconds
+```
+Booting all finished, dropped to user space
+RDIO: initialise entry point called
+RDIO:> Sending command.
+FPLN:< Command.
+  Map     = [
+             0: {0, 1, 2}
+             1: {1, 2, 3}
+             2: {2, 3, 4}
+             3: {3, 4, 5}
+            ]
+  Pattern = 2
+  HMAC    = 1
+FPLN:> new mission notification.
+WM:< Received flight plan
+  Mission:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+    4: {4, 5, 6}
+    5: {5, 6, 7}
+    6: {6, 7, 8}
+    7: {7, 8, 9}
+    8: {8, 9, 10}
+    9: {9, 10, 11}
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+FPLN:< Received mission receipt confirmation: 1.
+UART:> Sending 1 as the next id.
+WM:< Received 1 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 2 as the next id.
+WM:< Received 2 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 3 as the next id.
+WM:< Received 3 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 4 as the next id.
+WM:< Received 4 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 5 as the next id.
+WM:< Received 5 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+UART:> Sending 6 as the next id.
+WM:< Received 6 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {6, 7, 8}
+    1: {7, 8, 9}
+    2: {8, 9, 10}
+    3: {9, 10, 11}
+UART:> Sending 7 as the next id.
+WM:< Received 7 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {7, 8, 9}
+    1: {8, 9, 10}
+    2: {9, 10, 11}
+    3: {0, 1, 2}
+UART:> Sending 8 as the next id.
+WM:< Received 8 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {8, 9, 10}
+    1: {9, 10, 11}
+    2: {0, 1, 2}
+    3: {1, 2, 3}
+UART:> Sending 9 as the next id.
+WM:< Received 9 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {9, 10, 11}
+    1: {0, 1, 2}
+    2: {1, 2, 3}
+    3: {2, 3, 4}
+UART:> Sending 10 as the next id.
+WM:< Received 10 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+UART:> Sending 11 as the next id.
+WM:< Received 11 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 12 as the next id.
+WM:< Received 12 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 13 as the next id.
+WM:< Received 13 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 14 as the next id.
+WM:< Received 14 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 15 as the next id.
+WM:< Received 15 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+UART:> Sending 16 as the next id.
+WM:< Received 16 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {6, 7, 8}
+    1: {7, 8, 9}
+    2: {8, 9, 10}
+    3: {9, 10, 11}
+UART:> Sending 17 as the next id.
+WM:< Received 17 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {7, 8, 9}
+    1: {8, 9, 10}
+    2: {9, 10, 11}
+    3: {0, 1, 2}
+UART:> Sending 18 as the next id.
+WM:< Received 18 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {8, 9, 10}
+    1: {9, 10, 11}
+    2: {0, 1, 2}
+    3: {1, 2, 3}
+UART:> Sending 19 as the next id.
+WM:< Received 19 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {9, 10, 11}
+    1: {0, 1, 2}
+    2: {1, 2, 3}
+    3: {2, 3, 4}
+UART:> Sending 20 as the next id.
+WM:< Received 20 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {0, 1, 2}
+    1: {1, 2, 3}
+    2: {2, 3, 4}
+    3: {3, 4, 5}
+UART:> Sending 21 as the next id.
+WM:< Received 21 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {1, 2, 3}
+    1: {2, 3, 4}
+    2: {3, 4, 5}
+    3: {4, 5, 6}
+UART:> Sending 22 as the next id.
+WM:< Received 22 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {2, 3, 4}
+    1: {3, 4, 5}
+    2: {4, 5, 6}
+    3: {5, 6, 7}
+UART:> Sending 23 as the next id.
+WM:< Received 23 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {3, 4, 5}
+    1: {4, 5, 6}
+    2: {5, 6, 7}
+    3: {6, 7, 8}
+UART:> Sending 24 as the next id.
+WM:< Received 24 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {4, 5, 6}
+    1: {5, 6, 7}
+    2: {6, 7, 8}
+    3: {7, 8, 9}
+UART:> Sending 25 as the next id.
+WM:< Received 25 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {5, 6, 7}
+    1: {6, 7, 8}
+    2: {7, 8, 9}
+    3: {8, 9, 10}
+UART:> Sending 26 as the next id.
+WM:< Received 26 as the next id.
+WM:> Sent mission window
+UART:< Received mission window
+  MissionWindow:
+    0: {6, 7, 8}
+    1: {7, 8, 9}
+    2: {8, 9, 10}
+    3: {9, 10, 11}
+
+```
+<!--example-output-sel4_only_end-->
+
+
+### CAmkES Architecture: SeL4_Only
+<!--camkes-architecture-sel4_only_start-->
+![CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-arch-SeL4_Only.svg)
+<!--camkes-architecture-sel4_only_end-->
+
+
+### HAMR CAmkES Architecture: SeL4_Only
+<!--hamr-camkes-architecture-sel4_only_start-->
+![HAMR CAmkES Architecture: SeL4_Only](aadl/diagrams/CAmkES-HAMR-arch-SeL4_Only.svg)
+<!--hamr-camkes-architecture-sel4_only_end-->
+

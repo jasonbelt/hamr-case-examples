@@ -4,96 +4,56 @@ This directory contains a collection of micro-examples intended to illustrate ho
 
 The examples include:
 
-## simple_uav
+## [simple_uav](simple_uav)
 
 A simplified version of the UAV model, completed around the end of CASE Phase I. Native CAmkES components only, and no domain scheduling.
 
-## test_data_port
+## [test_data_port](test_data_port)
 
 Simple producer/consumer example using data port communications between native CAmkES components. No domain scheduling.
 
-## test_data_port_periodic
+## [test_data_port_periodic](test_data_port_periodic)
 
 Simple producer/consumer example using data port communications between native CAmkES components, and using the native seL4 timer to pace the components between separate scheduling domains.
 
-## test_data_port_periodic_domains
+## [test_data_port_periodic_domains](test_data_port_periodic_domains)
 
-Simple producer/consumer example using data port communications between native CAmkES components. There are several variations of this example:
+Simple producer/consumer example using data port communications between native CAmkES components. 
 
-- Embedded Pacer: a prototype of the self-pacing approach to domain scheduling, not currently implemented within HAMR as of this writing.
-
-- seL4_Only: Version of the example utilizing the standalone Pacer component to regulate the periodic invocation of components hosted within separate scheduling domains. This approach captured in this version is supported by the latest HAMR.
-
-- seL4_Only_ORIG: An earlier prototype of above "seL4_Only" example using the Pacer standalone approach.
-
-- seL4_TB: A version of this example, using the early "trusted build" approach (prior to CASE Phase I), with no domain scheduling, and port communications that are not fully compliant with AADL semantics.
-
-## test_data_port_periodic_domains_VM
+## [test_data_port_periodic_domains_VM](test_data_port_periodic_domains_VM)
 
 Example systems utilizing a data port communications connection between a sender and receiver, where either the sender, receiver, or both are implemented as a virtual machine component. These examples use the specialized connectors designed for communications to and from virtual machines within a CAmkES environment.
 
-## test_data_port_periodic_fan_out
+## [test_data_port_periodic_fan_out](test_data_port_periodic_fan_out)
 
 A producer/consumer example using data port communications where there are two consumer component to the single producer component. Native CAmkES components only, and no domain scheduling.
 
-## test_data_port_single_vm
 
-The producer/consumer example using data port communications between producer implemented as an application executing as a virtual machine, and a consumer implemented a native CAmkES component. Periodic domain scheduling is enforced by the standalone Pacer component.
-
-## test_event_data_port
+## [test_event_data_port](test_event_data_port)
 
 An early example of the producer/consumer example employing event data ports between native CAmkES components. This example used the "monitor" approach to maintain port communications, and is depricated.
 
-## test_event_data_port_fan_out
+## [test_event_data_port_fan_out](test_event_data_port_fan_out)
 
 A producer/consumer example using event data port communications where there are two consumer component to the single producer component. Native CAmkES components only, and domain scheduling is maintained using native seL4 timers to pace components within separate domains.
 
-## test_event_data_port_periodic_domains
+## [test_event_data_port_periodic_domains](test_event_data_port_periodic_domains)
 
-Simple producer/consumer example using event data port communications between components. There are several variations of this example, each originally developed by hand after generating the basic system (all CAmkES components) using HAMR:
+Simple producer/consumer example using event data port communications between components.
 
-- seL4_Only: This version employs native CAmkES components for both producer and consumer, and utilizes the Pacer component to maintain the periodic domain schedule.
+## [test_event_data_port_periodic_domains_VM](test_event_data_port_periodic_domains_VM)
 
-- seL4_Only_2VM: This version implements both the producer and consumer as applications executing in their own virtual machines. Each VM is assigned its own scheduling domain, and the Pacer component maintains the periodic domain schedule.
+Similar to "test_event_data_port_period_domains" above, except that one or both of the components have been placed in VMs
 
-- seL4_Only_with_VM: This version implements the producer component as an application running within a Linux virtual machine and the consumer as a native CAmkES component as the producer. The pacer component maintains a periodic domain schedule.
-
-- seL4_Only_with_VM_Rcv: This version implements the consumer component as an application running within a Linux virtual machine and the producer as a native CAmkES component as the producer. The pacer component maintains a periodic domain schedule.
-
-## test_event_data_port_periodic_domains_VM
-
-Similar to "test_event_data_port_period_domains" above, except that the producer/consumer example was entirely generated by HAMR (except for the behavior code). The pacer component enforces a periodic domain schedule. Variations:
-
-- both_vm: Both the producer and consumer are implemented as applications executing on separate virtual machines.
-
-- receiver_vm: The consumer component is implemented as an application executing on a virtual machine, while the producer is a native CAmkES component.
-
-- sender_vm: The producer component is implemented as an application executing on a virtual machine, while the consumer is a native CAmkES component.
-
-## test_event_data_port_periodic_domains_VMx
-
-A set of examples displaying the use of the event data port between components, where a single sender is communicating with two receiving components in a 1-to-2 fanout configuration. In one example of this set, the sender is a native CAmkES component connected to a native CAmkES component receiver and a virtual machine receiver. In the second example, the sender is implemented as a virtual machine, one of the receivers is a native CAmkES component, and the other receiver is implemented as a virtual machine.
-
-## test_event_data_port_two_vms
-
-This is an early hand-modified variation of the producer/consumer example that extended the "trusted build" code generation from HAMR. Used to exercise the cross-vm communications within CAmkES. This version is depricated.
-
-## test_event_port
+## [test_event_port](test_event_port)
 
 Simple producer/consumer example using event port communications between native CAmkES components. No domain scheduling.
 
-## test_event_port_fan_out
+## [test_event_port_fan_out](test_event_port_fan_out)
 
 Simple producer/consumer example using event port communications between a single producer and multiple consumers, all native CAmkES components. No domain scheduling.
 
 
-## test_event_port_periodic_domains
+## [test_event_port_periodic_domains](test_event_port_periodic_domains)
 
 The producer/consumer example using event port communications between native CAmkES components, and employing the Pacer component to enforce a periodic domain schedule.
-
-## test_event_port_vm
-
-Example systems utilizing an event port communications connection between a sender and receiver, where the sender is a native CAmkES component and the receiver is implemented as a virtual machine component. These examples use the specialized connectors designed for communications to and from virtual machines within a CAmkES environment.
-
-
-9NOV2020
